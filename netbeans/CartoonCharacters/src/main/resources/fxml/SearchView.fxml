@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.BoxBlur?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="558.0" prefWidth="984.0" styleClass="borderPane" stylesheets="@../styles/main.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.daniel.cartooncharacters.controller.SearchController">
+   <top>
+      <StackPane style="-fx-background-color: linear-gradient(to bottom, grey, white, grey);" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+         <children>
+            <Label style="-fx-background-color: rgba(0, 0, 0, 0);" text="Cartoon Database">
+               <font>
+                  <Font name="DejaVu Sans Bold" size="39.0" />
+               </font>
+               <textFill>
+                  <LinearGradient cycleMethod="REFLECT" endX="0.4807692307692307" endY="0.5480769230769231" startX="0.4807692307692307" startY="0.9278846153846153">
+                     <stops>
+                        <Stop color="BLACK" />
+                        <Stop color="#3861e8" offset="0.8444444444444448" />
+                        <Stop color="WHITE" offset="1.0" />
+                     </stops>
+                  </LinearGradient>
+               </textFill>
+               <StackPane.margin>
+                  <Insets bottom="10.0" top="10.0" />
+               </StackPane.margin>
+            </Label>
+            <MenuBar style="-fx-background-color: #ffffff00;" StackPane.alignment="TOP_CENTER">
+              <menus>
+                <Menu mnemonicParsing="false" text="File">
+                  <items>
+                        <Menu mnemonicParsing="false" text="New">
+                          <items>
+                            <MenuItem mnemonicParsing="false" text="Cartoon" />
+                              <MenuItem mnemonicParsing="false" text="Location" />
+                              <MenuItem mnemonicParsing="false" text="Character" />
+                          </items>
+                        </Menu>
+                        <MenuItem mnemonicParsing="false" onAction="#handleCloseAction" text="Close" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Edit">
+                  <items>
+                        <MenuItem fx:id="resetButton" mnemonicParsing="false" onAction="#handleResetAction" text="Reset Fields" />
+                  </items>
+                </Menu>
+                  <Menu mnemonicParsing="false" text="View">
+                     <items>
+                        <Menu mnemonicParsing="false" text="Statistics">
+                           <items>
+                              <MenuItem mnemonicParsing="false" onAction="#handleGenderStatistics" text="Gender" />
+                              <MenuItem mnemonicParsing="false" onAction="#handleGoodVsEvilStatistics" text="Good vs. Evil" />
+                           </items>
+                        </Menu>
+                     </items>
+                  </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="About" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+         </children>
+      </StackPane>
+   </top>
+   <center>
+      <AnchorPane id="AnchorPane" prefHeight="365.0" prefWidth="872.0" snapToPixel="false" BorderPane.alignment="CENTER">
+          <children>
+            <TableView fx:id="characterTable" layoutX="38.0" layoutY="100.0" prefHeight="305.0" prefWidth="789.0" AnchorPane.bottomAnchor="40.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="155.0" AnchorPane.topAnchor="100.0">
+              <columns>
+                <TableColumn fx:id="idColumn" prefWidth="114.0" text="Character ID" />
+                <TableColumn fx:id="characterNameColumn" prefWidth="271.0" text="Character Name" />
+                  <TableColumn fx:id="cartoonTitleColumn" prefWidth="291.0" text="Cartoon" />
+                  <TableColumn fx:id="selectColumn" prefWidth="111.0" text="Select" />
+              </columns>
+            </TableView>
+            <TextField fx:id="cartoonTitleSearch" layoutX="107.0" layoutY="40.0" prefHeight="26.0" prefWidth="232.0" />
+            <Label layoutX="26.0" layoutY="44.0" text="Cartoon:" AnchorPane.leftAnchor="40.0" />
+            <TextField fx:id="characterNameSearch" layoutX="508.0" layoutY="40.0" prefHeight="26.0" prefWidth="215.0" />
+            <Label layoutX="388.0" layoutY="45.0" text="Character Name:" />
+              <Button fx:id="searchButton" layoutX="765.0" layoutY="40.0" onAction="#handleSearchAction" text="Search" AnchorPane.rightAnchor="44.0" />
+            <ProgressIndicator fx:id="progressIndicator" layoutX="803.0" layoutY="27.0" style="-fx-progress-color: #0713bf;" visible="false">
+               <effect>
+                  <BoxBlur />
+               </effect></ProgressIndicator>
+          </children>
+      </AnchorPane>
+   </center>
+</BorderPane>

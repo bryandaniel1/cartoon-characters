@@ -1,0 +1,12 @@
+.borderPane, .gridPane {
+    -fx-background-color:  #d6eaf8;
+}
+.button {
+	-fx-background-color: linear-gradient(to bottom, grey, white, grey);
+}
+.button:hover {
+	-fx-background-color: linear-gradient(to bottom,   #cacfd2  , white,   #cacfd2);	
+}
+.button:focused {
+    -fx-border-color: white;
+}

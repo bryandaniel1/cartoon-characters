@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<properties>
+    <driverString>jdbc:postgresql://</driverString>
+    <host>localhost</host>
+    <databaseName>cartoons</databaseName>
+    <port>5432</port>
+    <username>cartoons_schema</username>
+    <password>8rl4ShF+TYMhQXAr7Syfxka1BnNWbmSwFK/4o5ixd8Y=</password>
+</properties>
