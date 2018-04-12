@@ -134,7 +134,6 @@ public class CharacterController implements Initializable {
         characterHide.setOnAction((event) -> this.handleCharacterHide(event));
 
         Thread thread = new Thread(task);
-        thread.setDaemon(true);
         thread.start();
     }
 

@@ -134,7 +134,6 @@ public class HomeController implements Initializable {
         locationHide.setOnAction((event) -> this.handleLocationHide(event));
 
         Thread thread = new Thread(task);
-        thread.setDaemon(true);
         thread.start();
     }
 

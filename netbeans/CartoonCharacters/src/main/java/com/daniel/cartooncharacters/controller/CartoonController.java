@@ -125,7 +125,6 @@ public class CartoonController implements Initializable {
         cartoonHide.setOnAction((event) -> this.handleCartoonHide(event));
 
         Thread thread = new Thread(task);
-        thread.setDaemon(true);
         thread.start();
     }
 

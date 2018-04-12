@@ -81,7 +81,6 @@ public class CartoonCharacters extends Application {
         stage.centerOnScreen();
         stage.setMinHeight(MIN_STAGE_HEIGHT);
         stage.setMinWidth(MIN_STAGE_WIDTH);
-        stage.setMaximized(true);
         stage.show();
     }
 

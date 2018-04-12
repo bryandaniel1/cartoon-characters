@@ -150,7 +150,6 @@ public class SearchController implements Initializable {
             characterList.bind(task.valueProperty());
             progressIndicator.visibleProperty().bind(task.runningProperty());
             Thread thread = new Thread(task);
-            thread.setDaemon(true);
             thread.start();
         }
     }
