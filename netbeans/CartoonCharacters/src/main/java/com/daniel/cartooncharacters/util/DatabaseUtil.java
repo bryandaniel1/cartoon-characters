@@ -21,12 +21,12 @@ import com.daniel.cartooncharacters.entity.CartoonLocation;
 import com.daniel.cartooncharacters.entity.CartoonPicture;
 import com.daniel.cartooncharacters.entity.CharacterDemographic;
 import com.daniel.cartooncharacters.entity.Gender;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
 /**
@@ -37,9 +37,48 @@ import org.hibernate.cfg.Configuration;
 public class DatabaseUtil {
 
     /**
+     * Holds the resources for database connections
+     */
+    public static Map<Session, StandardServiceRegistry> connectionResources = new ConcurrentHashMap<>();
+
+    /**
      * Private constructor - not called
      */
     public DatabaseUtil() {
+    }
+
+    /**
+     * Creates a new Hibernate session using the configuration information and
+     * returns it.
+     *
+     * @return a new Hibernate session
+     */
+    public static Session getNewSession() {
+        Configuration config = DatabaseUtil.getConfiguration();
+        StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+                .applySettings(config.getProperties()).build();
+        SessionFactory sessionFactory = config.buildSessionFactory(serviceRegistry);
+        Session session = sessionFactory.openSession();
+        connectionResources.put(session, serviceRegistry);
+        return session;
+    }
+
+    /**
+     * Closes the given Hibernate session and the registry object associated
+     * with it. These objects are also removed from the connection resources
+     * map.
+     *
+     * @param session the session to close
+     */
+    public static void close(Session session) {
+        StandardServiceRegistry serviceRegistry = null;
+        if (session != null) {
+            serviceRegistry = connectionResources.remove(session);
+            session.close();
+        }
+        if (serviceRegistry != null) {
+            StandardServiceRegistryBuilder.destroy(serviceRegistry);
+        }
     }
 
     /**
@@ -48,8 +87,8 @@ public class DatabaseUtil {
      *
      * @return the configuration
      */
-    public static Configuration getConfiguration() {
-        
+    private static Configuration getConfiguration() {
+
         ConnectionProperties properties = ConfigurationManager.getConnectionProperties();
         StringBuilder urlString = new StringBuilder();
         urlString.append(properties.getProperty(ConnectionProperties.DRIVER_STRING));
@@ -58,7 +97,7 @@ public class DatabaseUtil {
         urlString.append(properties.getProperty(ConnectionProperties.PORT));
         urlString.append("/");
         urlString.append(properties.getProperty(ConnectionProperties.DATABASE_NAME));
-        
+
         Configuration config = new Configuration();
         config.addAnnotatedClass(Cartoon.class);
         config.addAnnotatedClass(CartoonLocation.class);
@@ -76,59 +115,13 @@ public class DatabaseUtil {
         config.setProperty("hibernate.current_session_context_class", "thread");
         config.setProperty("connection.provider_class", "org.hibernate.connection.C3P0ConnectionProvider");
         config.setProperty("hibernate.c3p0.min_size", "10");
-        config.setProperty("hibernate.c3p0.max_size", "20");
+        config.setProperty("hibernate.c3p0.max_size", "100");
         config.setProperty("hibernate.c3p0.acquire_increment", "1");
-        config.setProperty("hibernate.c3p0.idle_test_period", "3000");
-        config.setProperty("hibernate.c3p0.max_statements", "50");
-        config.setProperty("hibernate.c3p0.timeout", "1800");
+        config.setProperty("hibernate.c3p0.max_statements", "100");
+        config.setProperty("hibernate.c3p0.idle_test_period", "300");
+        config.setProperty("hibernate.c3p0.timeout", "3000");
+        config.setProperty("hibernate.c3p0.testConnectionOnCheckout", "true");
+        config.setProperty("hibernate.c3p0.preferredTestQuery", "SELECT 1");
         return config;
-    }
-
-    /**
-     * This utility method closes the given result set.
-     *
-     * @param resultSet the result set
-     */
-    public static void closeResultSet(ResultSet resultSet) {
-        if (resultSet != null) {
-            try {
-                resultSet.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(DatabaseUtil.class.getName()).log(Level.INFO,
-                        "Connection exception occurred closing the result set.", ex);
-            }
-        }
-    }
-
-    /**
-     * This utility method closes the given statement.
-     *
-     * @param statement the statement
-     */
-    public static void closeStatement(Statement statement) {
-        if (statement != null) {
-            try {
-                statement.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(DatabaseUtil.class.getName()).log(Level.INFO,
-                        "Connection exception occurred closing the statement.", ex);
-            }
-        }
-    }
-
-    /**
-     * This utility method closes the given connection.
-     *
-     * @param connection the connection
-     */
-    public static void closeConnection(Connection connection) {
-        if (connection != null) {
-            try {
-                connection.close();
-            } catch (SQLException ex) {
-                Logger.getLogger(DatabaseUtil.class.getName()).log(Level.INFO,
-                        "Connection exception occurred closing the connection.", ex);
-            }
-        }
     }
 }

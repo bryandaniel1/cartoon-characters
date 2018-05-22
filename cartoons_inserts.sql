@@ -30,7 +30,8 @@ INSERT INTO character_quote (character_id, quote) VALUES (1, 'By the power of Gr
 INSERT INTO cartoon_picture (picture_location, cartoon_id, location_id, character_id) VALUES ('/img/motu/masters-of-the-universe.jpg', 1, NULL, NULL), 
 ('/img/motu/eternia.jpg', NULL, 1, NULL), ('/img/motu/castle-grayskull.jpg', NULL, 2, NULL), ('/img/motu/royal-palace.jpg', NULL, 3, NULL), 
 ('/img/motu/snake-mountain.jpg', NULL, 4, NULL), ('/img/motu/he-man.jpg', NULL, NULL, 1), ('/img/motu/skeletor-attacking.jpg', NULL, NULL, 2), ('/img/motu/teela.png', NULL, NULL, 3), 
-('/img/motu/man-at-arms.jpg', NULL, NULL, 4), ('/img/motu/sorceress.png', NULL, NULL, 5), ('/img/motu/mer-man-vs-he-man.jpg', NULL, NULL, 6), ('/img/motu/beast-man-vs-he-man.jpg', NULL, NULL, 7);
+('/img/motu/man-at-arms.jpg', NULL, NULL, 4), ('/img/motu/sorceress.png', NULL, NULL, 5), ('/img/motu/mer-man-vs-he-man.jpg', NULL, NULL, 6), ('/img/motu/beast-man-vs-he-man.jpg', NULL, NULL, 7)
+, ('/img/motu/battle-cat-and-he-man.jpg', NULL, NULL, 1), ('/img/motu/he-man-defending-with-sword.png', NULL, NULL, 1);
 
 INSERT INTO gender (gender, description) VALUES ('M', 'male'), ('F', 'female'), ('U', 'unknown'), ('N','not applicable');
 

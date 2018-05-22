@@ -29,10 +29,6 @@ import javafx.scene.chart.PieChart.Data;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.boot.registry.StandardServiceRegistry;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
 
 /**
  * This StatisticsDataAccess implementation provides the functionality for
@@ -52,14 +48,9 @@ public class GenderStatisticsDataAccess implements StatisticsDataAccess {
     @Override
     public List<Data> findStatistics(Cartoon cartoon) {
         ObservableList<Data> statistics = FXCollections.observableArrayList();
-        StandardServiceRegistry serviceRegistry = null;
         Session session = null;
         try {
-            Configuration config = DatabaseUtil.getConfiguration();
-            serviceRegistry = new StandardServiceRegistryBuilder()
-                    .applySettings(config.getProperties()).build();
-            SessionFactory sessionFactory = config.buildSessionFactory(serviceRegistry);
-            session = sessionFactory.openSession();
+            session = DatabaseUtil.getNewSession();
             
             StringBuilder queryString = new StringBuilder();
             queryString.append("SELECT COUNT(*) FROM CharacterDemographic");
@@ -98,18 +89,13 @@ public class GenderStatisticsDataAccess implements StatisticsDataAccess {
                     new PieChart.Data("not applicable", new BigDecimal(notApplicableCount).divide(totalCount, 2, RoundingMode.HALF_UP).doubleValue()));
 
         } catch (HibernateException he) {
-            Logger.getLogger(SimpleCharacterDataAccess.class.getName()).log(Level.INFO,
+            Logger.getLogger(GenderStatisticsDataAccess.class.getName()).log(Level.INFO,
                     "HibernateException exception occurred during GenderStatisticsDataAccess.findStatistics.", he);
         } catch (Exception e) {
-            Logger.getLogger(SimpleCharacterDataAccess.class.getName()).log(Level.INFO,
+            Logger.getLogger(GenderStatisticsDataAccess.class.getName()).log(Level.INFO,
                     "Exception occurred during GenderStatisticsDataAccess.findStatistics.", e);
         } finally {
-            if (session != null) {
-                session.close();
-            }
-            if (serviceRegistry != null) {
-                StandardServiceRegistryBuilder.destroy(serviceRegistry);
-            }
+            DatabaseUtil.close(session);
         }
         return statistics;
     }

@@ -48,9 +48,18 @@
                   <items>
                         <Menu mnemonicParsing="false" text="New">
                           <items>
-                            <MenuItem mnemonicParsing="false" text="Cartoon" />
-                              <MenuItem mnemonicParsing="false" text="Location" />
-                              <MenuItem mnemonicParsing="false" text="Character" />
+                            <MenuItem mnemonicParsing="false" onAction="#handleAddCartoon" text="Cartoon" />
+                              <MenuItem mnemonicParsing="false" onAction="#handleAddLocation" text="Location" />
+                              <MenuItem mnemonicParsing="false" onAction="#handleAddCharacter" text="Character" />
+                              <MenuItem mnemonicParsing="false" text="Picture" />
+                          </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Update">
+                          <items>
+                            <MenuItem mnemonicParsing="false" onAction="#handleUpdateCartoon" text="Cartoon" />
+                              <MenuItem mnemonicParsing="false" onAction="#handleUpdateLocation" text="Location" />
+                              <MenuItem mnemonicParsing="false" onAction="#handleUpdateCharacter" text="Character" />
+                              <MenuItem mnemonicParsing="false" text="Picture" />
                           </items>
                         </Menu>
                         <MenuItem mnemonicParsing="false" onAction="#handleCloseAction" text="Close" />
@@ -92,9 +101,9 @@
                   <TableColumn fx:id="selectColumn" prefWidth="111.0" text="Select" />
               </columns>
             </TableView>
-            <TextField fx:id="cartoonTitleSearch" layoutX="107.0" layoutY="40.0" prefHeight="26.0" prefWidth="232.0" />
+            <TextField fx:id="cartoonTitleTextField" layoutX="107.0" layoutY="40.0" prefHeight="26.0" prefWidth="232.0" />
             <Label layoutX="26.0" layoutY="44.0" text="Cartoon:" AnchorPane.leftAnchor="40.0" />
-            <TextField fx:id="characterNameSearch" layoutX="508.0" layoutY="40.0" prefHeight="26.0" prefWidth="215.0" />
+            <TextField fx:id="characterNameTextField" layoutX="508.0" layoutY="40.0" prefHeight="26.0" prefWidth="215.0" />
             <Label layoutX="388.0" layoutY="45.0" text="Character Name:" />
               <Button fx:id="searchButton" layoutX="765.0" layoutY="40.0" onAction="#handleSearchAction" text="Search" AnchorPane.rightAnchor="44.0" />
             <ProgressIndicator fx:id="progressIndicator" layoutX="803.0" layoutY="27.0" style="-fx-progress-color: #0713bf;" visible="false">

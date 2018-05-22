@@ -18,14 +18,11 @@ package com.daniel.cartooncharacters.controller;
 import com.daniel.cartooncharacters.util.ScreenChangeManager;
 import com.daniel.cartooncharacters.entity.Cartoon;
 import com.daniel.cartooncharacters.entity.CartoonPicture;
-import com.daniel.cartooncharacters.task.PictureSearchTask;
-import java.net.URL;
+import com.daniel.cartooncharacters.task.SearchPictureTask;
 import java.util.List;
-import java.util.ResourceBundle;
 import javafx.beans.property.SimpleListProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
@@ -36,37 +33,37 @@ import javafx.scene.image.ImageView;
  *
  * @author Bryan Daniel
  */
-public class CartoonController implements Initializable {
+public class CartoonController {
 
     /**
      * The text area for the cartoon ID
      */
     @FXML
-    private TextArea cartoonIdDetail;
+    private TextArea cartoonIdTextArea;
 
     /**
      * The text area for the cartoon title
      */
     @FXML
-    private TextArea titleDetail;
+    private TextArea titleTextArea;
 
     /**
      * The text area for the cartoon description
      */
     @FXML
-    private TextArea descriptionDetail;
+    private TextArea descriptionTextArea;
 
     /**
      * The text area for the cartoon picture location
      */
     @FXML
-    private TextArea pictureLocationDetail;
+    private TextArea pictureLocationTextArea;
 
     /**
      * The button for returning to the location details screen
      */
     @FXML
-    private Button cartoonHide;
+    private Button cartoonHideButton;
 
     /**
      * The image view for the cartoon
@@ -103,26 +100,23 @@ public class CartoonController implements Initializable {
 
     /**
      * This method sets the values for the cartoon details view.
-     *
-     * @param location the URL
-     * @param resources the resource bundle
      */
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        cartoonIdDetail.setText(cartoon.getCartoonId().toString());
-        titleDetail.setText(cartoon.getTitle());
-        descriptionDetail.setText(cartoon.getDescription());
+    @FXML
+    public void initialize() {
+        cartoonIdTextArea.setText(cartoon.getCartoonId().toString());
+        titleTextArea.setText(cartoon.getTitle());
+        descriptionTextArea.setText(cartoon.getDescription());
 
-        PictureSearchTask task = new PictureSearchTask(cartoon.getCartoonId(),
-                PictureSearchTask.PictureType.CARTOON);
+        SearchPictureTask task = new SearchPictureTask(cartoon.getCartoonId(),
+                SearchPictureTask.PictureType.CARTOON);
         pictureList.bind(task.valueProperty());
         pictureList.addListener((observable, oldValue, newValue) -> {
-            pictureLocationDetail.setText(((List<CartoonPicture>) newValue).get(0).getPictureLocation());
+            pictureLocationTextArea.setText(((List<CartoonPicture>) newValue).get(0).getPictureLocation());
         });
-        pictureLocationDetail.textProperty().addListener((observable, oldValue, newValue) -> {
+        pictureLocationTextArea.textProperty().addListener((observable, oldValue, newValue) -> {
             cartoonImage.setImage(new Image(HomeController.class.getResourceAsStream(newValue)));
         });
-        cartoonHide.setOnAction((event) -> this.handleCartoonHide(event));
+        cartoonHideButton.setOnAction((event) -> this.handleCartoonHide(event));
 
         Thread thread = new Thread(task);
         thread.start();

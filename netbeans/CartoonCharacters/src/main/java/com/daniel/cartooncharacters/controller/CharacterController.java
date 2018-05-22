@@ -16,14 +16,11 @@
 package com.daniel.cartooncharacters.controller;
 
 import com.daniel.cartooncharacters.util.ScreenChangeManager;
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
 import com.daniel.cartooncharacters.entity.CartoonCharacter;
 import com.daniel.cartooncharacters.entity.CartoonPicture;
-import com.daniel.cartooncharacters.task.PictureSearchTask;
+import com.daniel.cartooncharacters.task.SearchPictureTask;
 import java.util.List;
 import javafx.beans.property.SimpleListProperty;
 import javafx.event.ActionEvent;
@@ -31,55 +28,73 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 
 /**
  * This controller provides data for the character details view.
  *
  * @author Bryan Daniel
  */
-public class CharacterController implements Initializable {
+public class CharacterController {
+
+    /**
+     * The percentage value for half opaque
+     */
+    public static final double HALF_OPAQUE = 0.5;
 
     /**
      * The text area for the character ID
      */
     @FXML
-    private TextArea characterIdDetail;
+    private TextArea characterIdTextArea;
 
     /**
      * The text area for the character name
      */
     @FXML
-    private TextArea characterNameDetail;
+    private TextArea characterNameTextArea;
 
     /**
      * The text area for the character description
      */
     @FXML
-    private TextArea descriptionDetail;
+    private TextArea descriptionTextArea;
 
     /**
      * The text area for the location of the character picture
      */
     @FXML
-    private TextArea pictureLocationDetail;
+    private TextArea pictureLocationTextArea;
 
     /**
      * The hyperlink for the character home details
      */
     @FXML
-    private Hyperlink characterHomeDetail;
+    private Hyperlink characterHomeHyperlink;
 
     /**
      * The button for returning to the search screen
      */
     @FXML
-    private Button characterHide;
+    private Button characterHideButton;
 
     /**
      * The image view for the cartoon character
      */
     @FXML
     private ImageView characterImage;
+
+    /**
+     * The right picture navigation arrow
+     */
+    @FXML
+    private Button rightArrowButton;
+
+    /**
+     * The left picture navigation arrow
+     */
+    @FXML
+    private Button leftArrowButton;
 
     /**
      * The character to view
@@ -97,6 +112,11 @@ public class CharacterController implements Initializable {
     private final SimpleListProperty pictureList = new SimpleListProperty();
 
     /**
+     * The index of the picture shown
+     */
+    private int currentPictureIndex;
+
+    /**
      * This constructor sets the value for the character to view and the value
      * for the screen change manager.
      *
@@ -110,28 +130,31 @@ public class CharacterController implements Initializable {
 
     /**
      * This method sets the values for the character details view.
-     *
-     * @param url the URL
-     * @param rb the resource bundle
      */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        characterIdDetail.setText(character.getCharacterId().toString());
-        characterNameDetail.setText(character.getCharacterName());
-        descriptionDetail.setText(character.getDescription());
+    @FXML
+    public void initialize() {
+        characterIdTextArea.setText(character.getCharacterId().toString());
+        characterNameTextArea.setText(character.getCharacterName());
+        descriptionTextArea.setText(character.getDescription());
 
-        PictureSearchTask task = new PictureSearchTask(character.getCharacterId(),
-                PictureSearchTask.PictureType.CHARACTER);
+        SearchPictureTask task = new SearchPictureTask(character.getCharacterId(),
+                SearchPictureTask.PictureType.CHARACTER);
         pictureList.bind(task.valueProperty());
         pictureList.addListener((observable, oldValue, newValue) -> {
-            pictureLocationDetail.setText(((List<CartoonPicture>) newValue).get(0).getPictureLocation());
+            currentPictureIndex = 0;
+            pictureLocationTextArea.setText(((List<CartoonPicture>) newValue).get(currentPictureIndex)
+                    .getPictureLocation());
+            if (pictureList.size() > 1) {
+                rightArrowButton.setDisable(false);
+                rightArrowButton.setVisible(true);
+            }
         });
-        pictureLocationDetail.textProperty().addListener((observable, oldValue, newValue) -> {
+        pictureLocationTextArea.textProperty().addListener((observable, oldValue, newValue) -> {
             characterImage.setImage(new Image(HomeController.class.getResourceAsStream(newValue)));
         });
-        characterHomeDetail.setText(character.getCharacterHome().getLocationName());
-        characterHomeDetail.setOnAction((event) -> this.handleHomeSelect(event));
-        characterHide.setOnAction((event) -> this.handleCharacterHide(event));
+        characterHomeHyperlink.setText(character.getCharacterHome().getLocationName());
+        characterHomeHyperlink.setOnAction((event) -> this.handleHomeSelect(event));
+        characterHideButton.setOnAction((event) -> this.handleCharacterHide(event));
 
         Thread thread = new Thread(task);
         thread.start();
@@ -154,5 +177,59 @@ public class CharacterController implements Initializable {
      */
     private void handleCharacterHide(ActionEvent event) {
         screenChangeManager.hideCharacterDetails(event);
+    }
+
+    /**
+     * Handles the mouse entered event for a button.
+     *
+     * @param event the mouse event to handle
+     */
+    @FXML
+    void handleMouseEntered(MouseEvent event) {
+        ((Button) event.getTarget()).setOpacity(HALF_OPAQUE);
+    }
+
+    /**
+     * Handles the mouse exited event for a button.
+     *
+     * @param event the mouse event to handle
+     */
+    @FXML
+    void handleMouseExited(MouseEvent event) {
+        ((Button) event.getTarget()).setOpacity(0);
+    }
+
+    /**
+     * Handles the mouse click event for the the left arrow button.
+     *
+     * @param event the mouse event to handle
+     */
+    @FXML
+    void handleLeftArrowClick(ActionEvent event) {
+        pictureLocationTextArea.setText(((CartoonPicture) pictureList.get(--currentPictureIndex))
+                .getPictureLocation());
+        rightArrowButton.setDisable(false);
+        rightArrowButton.setVisible(true);
+        if (currentPictureIndex == 0) {
+            leftArrowButton.setDisable(true);
+            leftArrowButton.setVisible(false);
+        }
+    }
+
+    /**
+     * Handles the mouse click event for the the right arrow button.
+     *
+     * @param event the mouse event to handle
+     */
+    @FXML
+    void handleRightArrowClick(ActionEvent event) {
+        pictureLocationTextArea.setText(((CartoonPicture) pictureList.get(++currentPictureIndex))
+                .getPictureLocation());
+        leftArrowButton.setDisable(false);
+        leftArrowButton.setVisible(true);
+        if (pictureList.size() <= (currentPictureIndex + 1)) {
+            rightArrowButton.setDisable(true);
+            rightArrowButton.setVisible(false);
+        }
     }
 }

@@ -15,14 +15,11 @@
  */
 package com.daniel.cartooncharacters.controller;
 
-import com.daniel.cartooncharacters.task.CharacterSearchTask;
+import com.daniel.cartooncharacters.task.SearchCharacterTask;
 import com.daniel.cartooncharacters.util.ScreenChangeManager;
 
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -31,10 +28,17 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import com.daniel.cartooncharacters.entity.CartoonCharacter;
 import com.daniel.cartooncharacters.task.StatisticsTask;
 import com.daniel.cartooncharacters.validation.InputValidator;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleListProperty;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.SelectionMode;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
@@ -43,7 +47,7 @@ import javafx.stage.Stage;
  *
  * @author Bryan Daniel
  */
-public class SearchController implements Initializable {
+public class SearchController {
 
     /**
      * The table to display cartoon character search results
@@ -79,13 +83,13 @@ public class SearchController implements Initializable {
      * The cartoon character name search field
      */
     @FXML
-    private TextField characterNameSearch;
+    private TextField characterNameTextField;
 
     /**
      * The cartoon title search field
      */
     @FXML
-    private TextField cartoonTitleSearch;
+    private TextField cartoonTitleTextField;
 
     /**
      * The progress indicator for a search
@@ -111,12 +115,9 @@ public class SearchController implements Initializable {
     /**
      * This method sets initial values for the search view and objects required
      * by this controller.
-     *
-     * @param url the URL
-     * @param rb the resource bundle
      */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    @FXML
+    public void initialize() {
         characterTable.setItems(characterList);
         characterTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         idColumn.setCellValueFactory(new PropertyValueFactory<>("characterId"));
@@ -125,9 +126,9 @@ public class SearchController implements Initializable {
         selectColumn.setCellValueFactory(new PropertyValueFactory<>("viewButton"));
         validator = new InputValidator();
         screenChangeManager = new ScreenChangeManager();
-        cartoonTitleSearch.sceneProperty().addListener((observable, oldValue, newValue) -> {
+        cartoonTitleTextField.sceneProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                cartoonTitleSearch.requestFocus();
+                cartoonTitleTextField.requestFocus();
             }
         });
     }
@@ -142,10 +143,10 @@ public class SearchController implements Initializable {
     @FXML
     public void handleSearchAction(ActionEvent event) {
         characterList.clear();
-        String characterName = characterNameSearch.getText();
-        String cartoonTitle = cartoonTitleSearch.getText();
-        if (validator.inputGivenForSearch(characterName, cartoonTitle)) {
-            CharacterSearchTask task = new CharacterSearchTask(characterName, cartoonTitle,
+        String characterName = characterNameTextField.getText();
+        String cartoonTitle = cartoonTitleTextField.getText();
+        if (validator.inputValidForSearch(characterName, cartoonTitle)) {
+            SearchCharacterTask task = new SearchCharacterTask(characterName, cartoonTitle,
                     screenChangeManager);
             characterList.bind(task.valueProperty());
             progressIndicator.visibleProperty().bind(task.runningProperty());
@@ -162,8 +163,8 @@ public class SearchController implements Initializable {
     @FXML
     public void handleResetAction(ActionEvent event) {
         characterList.clear();
-        characterNameSearch.clear();
-        cartoonTitleSearch.clear();
+        characterNameTextField.clear();
+        cartoonTitleTextField.clear();
     }
 
     /**
@@ -172,13 +173,12 @@ public class SearchController implements Initializable {
      * @param event the action event
      */
     @FXML
-    void handleGenderStatistics(ActionEvent event) {
+    public void handleGenderStatistics(ActionEvent event) {
         if (validator.validateStatisticsSelection(characterList, characterTable)) {
             StatisticsTask task = new StatisticsTask(characterTable.getSelectionModel().getSelectedItem()
                     .getCharacterHome().getCartoon(), StatisticsTask.StatisticsType.GENDER,
                     (Stage) characterTable.getScene().getWindow());
             Thread thread = new Thread(task);
-            thread.setDaemon(true);
             thread.start();
         }
     }
@@ -190,14 +190,145 @@ public class SearchController implements Initializable {
      * @param event the action event
      */
     @FXML
-    void handleGoodVsEvilStatistics(ActionEvent event) {
+    public void handleGoodVsEvilStatistics(ActionEvent event) {
         if (validator.validateStatisticsSelection(characterList, characterTable)) {
             StatisticsTask task = new StatisticsTask(characterTable.getSelectionModel().getSelectedItem()
                     .getCharacterHome().getCartoon(), StatisticsTask.StatisticsType.GOOD_VS_EVIL,
                     (Stage) characterTable.getScene().getWindow());
             Thread thread = new Thread(task);
-            thread.setDaemon(true);
             thread.start();
+        }
+    }
+
+    /**
+     * Handles the action for the menu option to add a new cartoon to the
+     * database.
+     *
+     * @param event the action event
+     */
+    @FXML
+    public void handleAddCartoon(ActionEvent event) {
+        Stage addCartoonStage = new Stage();
+        addCartoonStage.initModality(Modality.WINDOW_MODAL);
+        addCartoonStage.initOwner(characterTable.getScene().getWindow());
+        Parent root;
+        try {
+            root = FXMLLoader.load(getClass().getResource("/fxml/AddCartoonView.fxml"));
+            addCartoonStage.setScene(new Scene(root));
+            addCartoonStage.setTitle("Add Cartoon");
+            addCartoonStage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
+     * Handles the action for the menu option to update a cartoon in the
+     * database.
+     *
+     * @param event the action event
+     */
+    @FXML
+    public void handleUpdateCartoon(ActionEvent event) {
+        Stage updateCartoonStage = new Stage();
+        updateCartoonStage.initModality(Modality.WINDOW_MODAL);
+        updateCartoonStage.initOwner(characterTable.getScene().getWindow());
+        Parent root;
+        try {
+            root = FXMLLoader.load(getClass().getResource("/fxml/UpdateCartoonView.fxml"));
+            updateCartoonStage.setScene(new Scene(root));
+            updateCartoonStage.setTitle("Update Cartoon");
+            updateCartoonStage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
+     * Handles the action for the menu option to add a new cartoon location to
+     * the database.
+     *
+     * @param event the action event
+     */
+    @FXML
+    public void handleAddLocation(ActionEvent event) {
+        Stage addCartoonStage = new Stage();
+        addCartoonStage.initModality(Modality.WINDOW_MODAL);
+        addCartoonStage.initOwner(characterTable.getScene().getWindow());
+        Parent root;
+        try {
+            root = FXMLLoader.load(getClass().getResource("/fxml/AddLocationView.fxml"));
+            addCartoonStage.setScene(new Scene(root));
+            addCartoonStage.setTitle("Add Location");
+            addCartoonStage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
+     * Handles the action for the menu option to update a cartoon location in
+     * the database.
+     *
+     * @param event the action event
+     */
+    @FXML
+    public void handleUpdateLocation(ActionEvent event) {
+        Stage updateLocationStage = new Stage();
+        updateLocationStage.initModality(Modality.WINDOW_MODAL);
+        updateLocationStage.initOwner(characterTable.getScene().getWindow());
+        Parent root;
+        try {
+            root = FXMLLoader.load(getClass().getResource("/fxml/UpdateLocationView.fxml"));
+            updateLocationStage.setScene(new Scene(root));
+            updateLocationStage.setTitle("Update Location");
+            updateLocationStage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
+     * Handles the action for the menu option to add a new cartoon character to
+     * the database.
+     *
+     * @param event the action event
+     */
+    @FXML
+    public void handleAddCharacter(ActionEvent event) {
+        Stage addCartoonStage = new Stage();
+        addCartoonStage.initModality(Modality.WINDOW_MODAL);
+        addCartoonStage.initOwner(characterTable.getScene().getWindow());
+        Parent root;
+        try {
+            root = FXMLLoader.load(getClass().getResource("/fxml/AddCharacterView.fxml"));
+            addCartoonStage.setScene(new Scene(root));
+            addCartoonStage.setTitle("Add Character");
+            addCartoonStage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
+     * Handles the action for the menu option to update a cartoon character in
+     * the database.
+     *
+     * @param event the action event
+     */
+    @FXML
+    public void handleUpdateCharacter(ActionEvent event) {
+        Stage updateLocationStage = new Stage();
+        updateLocationStage.initModality(Modality.WINDOW_MODAL);
+        updateLocationStage.initOwner(characterTable.getScene().getWindow());
+        Parent root;
+        try {
+            root = FXMLLoader.load(getClass().getResource("/fxml/UpdateCharacterView.fxml"));
+            updateLocationStage.setScene(new Scene(root));
+            updateLocationStage.setTitle("Update Character");
+            updateLocationStage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

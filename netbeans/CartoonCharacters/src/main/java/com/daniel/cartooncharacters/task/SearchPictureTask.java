@@ -32,7 +32,7 @@ import javafx.concurrent.Task;
  *
  * @author Bryan Daniel
  */
-public class PictureSearchTask extends Task<SimpleListProperty> {
+public class SearchPictureTask extends Task<SimpleListProperty> {
 
     /**
      * The types of pictures to search for
@@ -67,7 +67,7 @@ public class PictureSearchTask extends Task<SimpleListProperty> {
      * @param entityIdentifier the identifier of the entity
      * @param type the type of picture
      */
-    public PictureSearchTask(Long entityIdentifier, PictureType type) {
+    public SearchPictureTask(Long entityIdentifier, PictureType type) {
         this.entityIdentifier = entityIdentifier;
         this.type = type;
         switch (type) {

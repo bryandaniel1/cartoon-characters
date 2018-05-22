@@ -10,7 +10,9 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <GridPane prefHeight="558.0" prefWidth="984.0" styleClass="gridPane" stylesheets="@../styles/main.css" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
    <columnConstraints>
@@ -33,7 +35,7 @@
                         <Insets right="10.0" />
                      </HBox.margin>
                   </Label>
-                  <TextArea fx:id="characterIdDetail" editable="false" prefHeight="47.0" prefWidth="272.0">
+                  <TextArea fx:id="characterIdTextArea" editable="false" prefHeight="47.0" prefWidth="272.0">
                      <HBox.margin>
                         <Insets left="10.0" />
                      </HBox.margin>
@@ -50,7 +52,7 @@
                         <Insets right="10.0" />
                      </HBox.margin>
                   </Label>
-                  <TextArea fx:id="characterNameDetail" editable="false" prefHeight="47.0" prefWidth="272.0">
+                  <TextArea fx:id="characterNameTextArea" editable="false" prefHeight="47.0" prefWidth="272.0">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
@@ -67,7 +69,7 @@
                         <Insets right="10.0" />
                      </HBox.margin>
                   </Label>
-                  <TextArea fx:id="descriptionDetail" editable="false" prefHeight="47.0" prefWidth="270.0" wrapText="true" />
+                  <TextArea fx:id="descriptionTextArea" editable="false" prefHeight="47.0" prefWidth="270.0" wrapText="true" />
                </children>
             </HBox>
             <HBox layoutX="10.0" layoutY="104.0" prefHeight="47.0" prefWidth="317.0">
@@ -80,7 +82,7 @@
                         <Insets right="10.0" />
                      </HBox.margin>
                   </Label>
-                  <TextArea fx:id="pictureLocationDetail" editable="false" prefHeight="47.0" prefWidth="268.0" />
+                  <TextArea fx:id="pictureLocationTextArea" editable="false" prefHeight="47.0" prefWidth="268.0" />
                </children>
             </HBox>
             <HBox layoutX="10.0" layoutY="151.0" prefHeight="47.0" prefWidth="317.0">
@@ -93,20 +95,40 @@
                         <Insets right="10.0" />
                      </HBox.margin>
                   </Label>
-                  <Hyperlink fx:id="characterHomeDetail" text="Hyperlink">
+                  <Hyperlink fx:id="characterHomeHyperlink" text="Hyperlink">
                      <HBox.margin>
                         <Insets top="10.0" />
                      </HBox.margin>
                   </Hyperlink>
                </children>
             </HBox>
-            <Button fx:id="characterHide" mnemonicParsing="false" text="Back">
+            <Button fx:id="characterHideButton" mnemonicParsing="false" text="Back">
                <VBox.margin>
                   <Insets left="20.0" top="20.0" />
                </VBox.margin>
             </Button>
          </children>
       </VBox>
-      <ImageView fx:id="characterImage" fitHeight="552.0" fitWidth="512.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="1" />
+      <StackPane GridPane.columnIndex="1">
+         <children>
+            <ImageView fx:id="characterImage" fitHeight="552.0" fitWidth="512.0" pickOnBounds="true" preserveRatio="true" />
+            <Button fx:id="rightArrowButton" disable="true" mnemonicParsing="false" onAction="#handleRightArrowClick" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" opacity="0.0" prefHeight="45.0" prefWidth="29.0" text="&gt;" visible="false" StackPane.alignment="CENTER_RIGHT">
+               <font>
+                  <Font size="25.0" />
+               </font>
+               <StackPane.margin>
+                  <Insets right="10.0" />
+               </StackPane.margin>
+            </Button>
+            <Button fx:id="leftArrowButton" disable="true" mnemonicParsing="false" onAction="#handleLeftArrowClick" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" opacity="0.0" prefHeight="45.0" prefWidth="29.0" text="&lt;" visible="false" StackPane.alignment="CENTER_LEFT">
+               <font>
+                  <Font size="25.0" />
+               </font>
+               <StackPane.margin>
+                  <Insets left="10.0" />
+               </StackPane.margin>
+            </Button>
+         </children>
+      </StackPane>
    </children>
 </GridPane>

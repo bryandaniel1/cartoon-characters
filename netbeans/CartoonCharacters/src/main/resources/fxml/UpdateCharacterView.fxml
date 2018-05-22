@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.daniel.cartooncharacters.controller.UpdateCharacterController">
+    <stylesheets>
+        <URL value="@/styles/main.css" />
+    </stylesheets>
+   <children>
+      <GridPane hgap="10.0" styleClass="gridPane" stylesheets="@../styles/main.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <columnConstraints>
+          <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" percentWidth="50.0" />
+          <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" percentWidth="50.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints percentHeight="12.0" vgrow="SOMETIMES" />
+          <RowConstraints percentHeight="12.0" valignment="CENTER" vgrow="SOMETIMES" />
+            <RowConstraints percentHeight="12.0" valignment="CENTER" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" percentHeight="12.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+            <RowConstraints percentHeight="12.0" valignment="CENTER" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" percentHeight="12.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+            <RowConstraints percentHeight="28.0" valignment="CENTER" vgrow="SOMETIMES" />
+          <RowConstraints percentHeight="12.0" valignment="CENTER" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <StackPane style="-fx-background-color: linear-gradient(to bottom, grey, white, grey);" stylesheets="@../styles/main.css" GridPane.columnSpan="2" GridPane.halignment="CENTER">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" style="-fx-background-color: rgba(0, 0, 0, 0);" text="Update Character" textAlignment="CENTER">
+                     <font>
+                        <Font name="DejaVu Sans Bold" size="39.0" />
+                     </font>
+                     <textFill>
+                        <LinearGradient cycleMethod="REFLECT" endX="0.4807692307692307" endY="0.5480769230769231" startX="0.4807692307692307" startY="0.9278846153846153">
+                           <stops>
+                              <Stop color="BLACK" />
+                              <Stop color="#3861e8" offset="0.8444444444444448" />
+                              <Stop color="WHITE" offset="1.0" />
+                           </stops>
+                        </LinearGradient>
+                     </textFill>
+                  </Label>
+               </children>
+            </StackPane>
+            <Label text="Choose Cartoon:" GridPane.rowIndex="1" />
+            <Label text="Character Description:" GridPane.rowIndex="6" />
+            <TextArea fx:id="characterDescriptionTextArea" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="6">
+               <GridPane.margin>
+                  <Insets right="30.0" top="40.0" />
+               </GridPane.margin>
+            </TextArea>
+            <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#handleCancelAction" text="Cancel" GridPane.rowIndex="7" />
+            <Button fx:id="saveButton" mnemonicParsing="false" onAction="#handleSaveAction" text="Save" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+            <ComboBox fx:id="cartoonNameComboBox" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label text="Choose Location:" GridPane.rowIndex="2" />
+            <ComboBox fx:id="locationNameComboBox" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <ChoiceBox fx:id="genderChoiceBox" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <ChoiceBox fx:id="goodOrEvilChoiceBox" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <Label text="Gender" GridPane.rowIndex="4" />
+            <Label text="Good or Evil" GridPane.rowIndex="5" />
+            <Label text="Choose Character" GridPane.rowIndex="3" />
+            <ComboBox fx:id="characterNameComboBox" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+         </children>
+      </GridPane>
+   </children>
+</AnchorPane>

@@ -37,13 +37,87 @@ public class InputValidator {
      * @param cartoonTitle the cartoon title
      * @return true if a non-empty value is given
      */
-    public boolean inputGivenForSearch(String characterName, String cartoonTitle) {
+    public boolean inputValidForSearch(String characterName, String cartoonTitle) {
         if (characterName.isEmpty() && cartoonTitle.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setResizable(true);
             alert.setTitle("Invalid Input");
             alert.setHeaderText("No values provided");
             alert.setContentText("A character name or cartoon title must be given.");
+            alert.showAndWait();
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * This validation method tests that at all inputs are provided for creation
+     * of a cartoon. If validation fails, an alert dialog is shown.
+     *
+     * @param cartoonName the name of the cartoon
+     * @param cartoonDescription the description of the cartoon
+     * @return true if all input is valid
+     */
+    public boolean inputValidForCartoonCreation(String cartoonName, String cartoonDescription) {
+        if (cartoonName.isEmpty() || cartoonDescription.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setResizable(true);
+            alert.setTitle("Invalid Input");
+            alert.setHeaderText("Input Missing");
+            alert.setContentText("A cartoon name and cartoon description must be given.");
+            alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+            alert.showAndWait();
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * This validation method tests that at all necessary inputs are provided
+     * for creation of a cartoon location. If validation fails, an alert dialog
+     * is shown.
+     *
+     * @param cartoonName the name of the cartoon
+     * @param locationName the name of the location
+     * @param locationDescription the description of the location
+     * @return true if all input is valid
+     */
+    public boolean inputValidForLocationCreation(String cartoonName, String locationName,
+            String locationDescription) {
+        if (cartoonName.isEmpty() || locationName.isEmpty() || locationDescription.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setResizable(true);
+            alert.setTitle("Invalid Input");
+            alert.setHeaderText("Input Missing");
+            alert.setContentText("A cartoon must be selected and location name and description must be given.");
+            alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+            alert.showAndWait();
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * This validation method tests that at all necessary inputs are provided
+     * for creation of a cartoon location. If validation fails, an alert dialog
+     * is shown.
+     *
+     * @param cartoonName the name of the cartoon
+     * @param locationName the name of the location
+     * @param characterName the name of the character
+     * @param characterDescription the description of the character
+     * @return true if all input is valid
+     */
+    public boolean inputValidForCharacterCreation(String cartoonName, String locationName, String characterName,
+            String characterDescription) {
+        if (cartoonName.isEmpty() || locationName.isEmpty() || characterName.isEmpty() 
+                || characterDescription.isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setResizable(true);
+            alert.setTitle("Invalid Input");
+            alert.setHeaderText("Input Missing");
+            alert.setContentText("All inputs must be provided for the character.");
+            alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
             alert.showAndWait();
             return false;
         }

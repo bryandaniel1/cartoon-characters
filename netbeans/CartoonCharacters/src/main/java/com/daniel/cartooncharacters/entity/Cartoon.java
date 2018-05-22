@@ -27,6 +27,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import org.hibernate.annotations.NaturalId;
 
 /**
  * This class holds details for a cartoon.
@@ -90,6 +91,7 @@ public class Cartoon implements Serializable {
      *
      * @return the value of title
      */
+    @NaturalId
     @Column(name = "title")
     public String getTitle() {
         return title.get();

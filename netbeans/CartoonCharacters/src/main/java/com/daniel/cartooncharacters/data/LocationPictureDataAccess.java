@@ -24,10 +24,6 @@ import java.util.logging.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.boot.registry.StandardServiceRegistry;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
 
 /**
  * This PictureDataAccess implementation provides the functionality for
@@ -49,7 +45,6 @@ public class LocationPictureDataAccess implements PictureDataAccess {
     public List<CartoonPicture> findPictures(Long entityIdentifier) {
 
         ArrayList<CartoonPicture> pictures = new ArrayList<>();
-        StandardServiceRegistry serviceRegistry = null;
         Session session = null;
         try {
             StringBuilder queryString = new StringBuilder();
@@ -57,11 +52,7 @@ public class LocationPictureDataAccess implements PictureDataAccess {
             queryString.append("FROM CartoonPicture picture ");
             queryString.append("WHERE picture.cartoonLocation.locationId = :locationId ");
 
-            Configuration config = DatabaseUtil.getConfiguration();
-            serviceRegistry = new StandardServiceRegistryBuilder()
-                    .applySettings(config.getProperties()).build();
-            SessionFactory sessionFactory = config.buildSessionFactory(serviceRegistry);
-            session = sessionFactory.openSession();
+            session = DatabaseUtil.getNewSession();
             Query query = session.createQuery(queryString.toString());
             query.setLong("locationId", entityIdentifier);
 
@@ -69,7 +60,6 @@ public class LocationPictureDataAccess implements PictureDataAccess {
             list.forEach((o) -> {
                 pictures.add((CartoonPicture) o);
             });
-
         } catch (HibernateException he) {
             Logger.getLogger(LocationPictureDataAccess.class.getName()).log(Level.INFO,
                     "HibernateException exception occurred during LocationPictureDataAccess.findPictures.", he);
@@ -77,12 +67,7 @@ public class LocationPictureDataAccess implements PictureDataAccess {
             Logger.getLogger(LocationPictureDataAccess.class.getName()).log(Level.INFO,
                     "Exception occurred during LocationPictureDataAccess.findPictures.", e);
         } finally {
-            if (session != null) {
-                session.close();
-            }
-            if (serviceRegistry != null) {
-                StandardServiceRegistryBuilder.destroy(serviceRegistry);
-            }
+            DatabaseUtil.close(session);
         }
         return pictures;
     }

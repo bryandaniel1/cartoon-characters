@@ -32,7 +32,7 @@
                         <Insets right="10.0" />
                      </HBox.margin>
                   </Label>
-                  <TextArea fx:id="cartoonIdDetail" editable="false" prefHeight="47.0" prefWidth="272.0">
+                  <TextArea fx:id="cartoonIdTextArea" editable="false" prefHeight="47.0" prefWidth="272.0">
                      <HBox.margin>
                         <Insets left="10.0" />
                      </HBox.margin>
@@ -49,7 +49,7 @@
                         <Insets right="10.0" />
                      </HBox.margin>
                   </Label>
-                  <TextArea fx:id="titleDetail" editable="false" prefHeight="47.0" prefWidth="271.0">
+                  <TextArea fx:id="titleTextArea" editable="false" prefHeight="47.0" prefWidth="271.0">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
@@ -66,7 +66,7 @@
                         <Insets right="10.0" />
                      </HBox.margin>
                   </Label>
-                  <TextArea fx:id="descriptionDetail" editable="false" prefHeight="47.0" prefWidth="270.0" wrapText="true" />
+                  <TextArea fx:id="descriptionTextArea" editable="false" prefHeight="47.0" prefWidth="270.0" wrapText="true" />
                </children>
             </HBox>
             <HBox layoutX="10.0" layoutY="104.0" prefHeight="47.0" prefWidth="317.0">
@@ -79,10 +79,10 @@
                         <Insets right="10.0" />
                      </HBox.margin>
                   </Label>
-                  <TextArea fx:id="pictureLocationDetail" editable="false" prefHeight="47.0" prefWidth="268.0" />
+                  <TextArea fx:id="pictureLocationTextArea" editable="false" prefHeight="47.0" prefWidth="268.0" />
                </children>
             </HBox>
-            <Button fx:id="cartoonHide" mnemonicParsing="false" text="Back">
+            <Button fx:id="cartoonHideButton" mnemonicParsing="false" text="Back">
                <VBox.margin>
                   <Insets left="20.0" top="20.0" />
                </VBox.margin>

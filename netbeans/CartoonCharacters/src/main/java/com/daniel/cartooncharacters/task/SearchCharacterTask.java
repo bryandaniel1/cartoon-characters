@@ -35,7 +35,7 @@ import javafx.collections.FXCollections;
  * @author Bryan Daniel
  *
  */
-public class CharacterSearchTask extends Task<SimpleListProperty> {
+public class SearchCharacterTask extends Task<SimpleListProperty> {
 
     /**
      * The list of characters to show in the search results table
@@ -43,12 +43,12 @@ public class CharacterSearchTask extends Task<SimpleListProperty> {
     private final ObservableList<CartoonCharacter> characterList = FXCollections.observableArrayList();
 
     /**
-     * The first name to search
+     * The character name to search
      */
     private final String characterName;
 
     /**
-     * The last name to search
+     * The cartoon title to search
      */
     private final String cartoonTitle;
 
@@ -69,7 +69,7 @@ public class CharacterSearchTask extends Task<SimpleListProperty> {
      * @param cartoonTitle the cartoon title
      * @param screenChangeManager the screen change manager
      */
-    public CharacterSearchTask(String characterName, String cartoonTitle,
+    public SearchCharacterTask(String characterName, String cartoonTitle,
             ScreenChangeManager screenChangeManager) {
         this.characterName = characterName;
         this.cartoonTitle = cartoonTitle;

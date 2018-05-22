@@ -18,14 +18,11 @@ package com.daniel.cartooncharacters.controller;
 import com.daniel.cartooncharacters.util.ScreenChangeManager;
 import com.daniel.cartooncharacters.entity.CartoonLocation;
 import com.daniel.cartooncharacters.entity.CartoonPicture;
-import com.daniel.cartooncharacters.task.PictureSearchTask;
-import java.net.URL;
+import com.daniel.cartooncharacters.task.SearchPictureTask;
 import java.util.List;
-import java.util.ResourceBundle;
 import javafx.beans.property.SimpleListProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.TextArea;
@@ -37,43 +34,43 @@ import javafx.scene.image.ImageView;
  *
  * @author Bryan Daniel
  */
-public class HomeController implements Initializable {
+public class HomeController {
 
     /**
      * The text area for the cartoon location ID
      */
     @FXML
-    private TextArea locationIdDetail;
+    private TextArea locationIdTextArea;
 
     /**
      * The text area for the cartoon location name
      */
     @FXML
-    private TextArea locationNameDetail;
+    private TextArea locationNameTextArea;
 
     /**
      * The text area for the cartoon location description
      */
     @FXML
-    private TextArea descriptionDetail;
+    private TextArea descriptionTextArea;
 
     /**
      * The text area for the location of the cartoon location picture
      */
     @FXML
-    private TextArea pictureLocationDetail;
+    private TextArea pictureLocationTextArea;
 
     /**
      * The hyperlink for the cartoon details
      */
     @FXML
-    private Hyperlink cartoonDetail;
+    private Hyperlink cartoonHyperlink;
 
     /**
      * The button for returning to the character details screen
      */
     @FXML
-    private Button locationHide;
+    private Button locationHideButton;
 
     /**
      * The image view for the cartoon location
@@ -110,28 +107,25 @@ public class HomeController implements Initializable {
 
     /**
      * This method sets the values for the cartoon location details view.
-     *
-     * @param url the URL
-     * @param rb the resource bundle
      */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        locationIdDetail.setText(location.getLocationId().toString());
-        locationNameDetail.setText(location.getLocationName());
-        descriptionDetail.setText(location.getDescription());
+    @FXML
+    public void initialize() {
+        locationIdTextArea.setText(location.getLocationId().toString());
+        locationNameTextArea.setText(location.getLocationName());
+        descriptionTextArea.setText(location.getDescription());
 
-        PictureSearchTask task = new PictureSearchTask(location.getLocationId(),
-                PictureSearchTask.PictureType.LOCATION);
+        SearchPictureTask task = new SearchPictureTask(location.getLocationId(),
+                SearchPictureTask.PictureType.LOCATION);
         pictureList.bind(task.valueProperty());
         pictureList.addListener((observable, oldValue, newValue) -> {
-            pictureLocationDetail.setText(((List<CartoonPicture>) newValue).get(0).getPictureLocation());
+            pictureLocationTextArea.setText(((List<CartoonPicture>) newValue).get(0).getPictureLocation());
         });
-        pictureLocationDetail.textProperty().addListener((observable, oldValue, newValue) -> {
+        pictureLocationTextArea.textProperty().addListener((observable, oldValue, newValue) -> {
             locationImage.setImage(new Image(HomeController.class.getResourceAsStream(newValue)));
         });
-        cartoonDetail.setText(location.getCartoon().getTitle());
-        cartoonDetail.setOnAction((event) -> this.handleCartoonSelect(event));
-        locationHide.setOnAction((event) -> this.handleLocationHide(event));
+        cartoonHyperlink.setText(location.getCartoon().getTitle());
+        cartoonHyperlink.setOnAction((event) -> this.handleCartoonSelect(event));
+        locationHideButton.setOnAction((event) -> this.handleLocationHide(event));
 
         Thread thread = new Thread(task);
         thread.start();

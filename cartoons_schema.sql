@@ -8,7 +8,8 @@ CREATE TABLE cartoons_schema.cartoon (
 	cartoon_id BIGSERIAL,
 	title VARCHAR(30),
 	description VARCHAR(1000),
-	CONSTRAINT PK_cartoon_id PRIMARY KEY (cartoon_id)
+	CONSTRAINT PK_cartoon_id PRIMARY KEY (cartoon_id),
+    	CONSTRAINT UK_cartoon_title UNIQUE (title)
 );
 
 CREATE TABLE cartoons_schema.cartoon_location (

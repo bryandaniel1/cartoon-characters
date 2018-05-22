@@ -33,7 +33,7 @@
                         <Insets right="10.0" />
                      </HBox.margin>
                   </Label>
-                  <TextArea fx:id="locationIdDetail" editable="false" prefHeight="47.0" prefWidth="272.0">
+                  <TextArea fx:id="locationIdTextArea" editable="false" prefHeight="47.0" prefWidth="272.0">
                      <HBox.margin>
                         <Insets left="10.0" />
                      </HBox.margin>
@@ -50,7 +50,7 @@
                         <Insets right="10.0" />
                      </HBox.margin>
                   </Label>
-                  <TextArea fx:id="locationNameDetail" editable="false" prefHeight="47.0" prefWidth="271.0">
+                  <TextArea fx:id="locationNameTextArea" editable="false" prefHeight="47.0" prefWidth="271.0">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
@@ -67,7 +67,7 @@
                         <Insets right="10.0" />
                      </HBox.margin>
                   </Label>
-                  <TextArea fx:id="descriptionDetail" editable="false" prefHeight="47.0" prefWidth="270.0" wrapText="true" />
+                  <TextArea fx:id="descriptionTextArea" editable="false" prefHeight="47.0" prefWidth="270.0" wrapText="true" />
                </children>
             </HBox>
             <HBox layoutX="10.0" layoutY="104.0" prefHeight="47.0" prefWidth="317.0">
@@ -80,7 +80,7 @@
                         <Insets right="10.0" />
                      </HBox.margin>
                   </Label>
-                  <TextArea fx:id="pictureLocationDetail" editable="false" prefHeight="47.0" prefWidth="268.0" />
+                  <TextArea fx:id="pictureLocationTextArea" editable="false" prefHeight="47.0" prefWidth="268.0" />
                </children>
             </HBox>
             <HBox layoutX="10.0" layoutY="151.0" prefHeight="47.0" prefWidth="317.0">
@@ -93,14 +93,14 @@
                         <Insets right="10.0" />
                      </HBox.margin>
                   </Label>
-                  <Hyperlink fx:id="cartoonDetail" text="Hyperlink">
+                  <Hyperlink fx:id="cartoonHyperlink" text="Hyperlink">
                      <HBox.margin>
                         <Insets top="10.0" />
                      </HBox.margin>
                   </Hyperlink>
                </children>
             </HBox>
-            <Button fx:id="locationHide" mnemonicParsing="false" text="Back">
+            <Button fx:id="locationHideButton" mnemonicParsing="false" text="Back">
                <VBox.margin>
                   <Insets left="20.0" top="20.0" />
                </VBox.margin>
