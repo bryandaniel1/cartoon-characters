@@ -21,8 +21,9 @@ import com.daniel.cartooncharacters.entity.CartoonLocation;
 import com.daniel.cartooncharacters.entity.CartoonPicture;
 import com.daniel.cartooncharacters.entity.CharacterDemographic;
 import com.daniel.cartooncharacters.entity.Gender;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistry;
@@ -37,58 +38,11 @@ import org.hibernate.cfg.Configuration;
 public class DatabaseUtil {
 
     /**
-     * Holds the resources for database connections
+     * The Hibernate session factory
      */
-    public static Map<Session, StandardServiceRegistry> connectionResources = new ConcurrentHashMap<>();
+    private static final SessionFactory SESSION_FACTORY;
 
-    /**
-     * Private constructor - not called
-     */
-    public DatabaseUtil() {
-    }
-
-    /**
-     * Creates a new Hibernate session using the configuration information and
-     * returns it.
-     *
-     * @return a new Hibernate session
-     */
-    public static Session getNewSession() {
-        Configuration config = DatabaseUtil.getConfiguration();
-        StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
-                .applySettings(config.getProperties()).build();
-        SessionFactory sessionFactory = config.buildSessionFactory(serviceRegistry);
-        Session session = sessionFactory.openSession();
-        connectionResources.put(session, serviceRegistry);
-        return session;
-    }
-
-    /**
-     * Closes the given Hibernate session and the registry object associated
-     * with it. These objects are also removed from the connection resources
-     * map.
-     *
-     * @param session the session to close
-     */
-    public static void close(Session session) {
-        StandardServiceRegistry serviceRegistry = null;
-        if (session != null) {
-            serviceRegistry = connectionResources.remove(session);
-            session.close();
-        }
-        if (serviceRegistry != null) {
-            StandardServiceRegistryBuilder.destroy(serviceRegistry);
-        }
-    }
-
-    /**
-     * This method sets and returns the Hibernate configuration properties for
-     * database connections.
-     *
-     * @return the configuration
-     */
-    private static Configuration getConfiguration() {
-
+    static {
         ConnectionProperties properties = ConfigurationManager.getConnectionProperties();
         StringBuilder urlString = new StringBuilder();
         urlString.append(properties.getProperty(ConnectionProperties.DRIVER_STRING));
@@ -122,6 +76,40 @@ public class DatabaseUtil {
         config.setProperty("hibernate.c3p0.timeout", "3000");
         config.setProperty("hibernate.c3p0.testConnectionOnCheckout", "true");
         config.setProperty("hibernate.c3p0.preferredTestQuery", "SELECT 1");
-        return config;
+
+        StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+                .applySettings(config.getProperties()).build();
+        SESSION_FACTORY = config.buildSessionFactory(serviceRegistry);
+    }
+
+    /**
+     * Private constructor - not called
+     */
+    public DatabaseUtil() {
+    }
+
+    /**
+     * Creates a new Hibernate session using the session factory and returns it.
+     *
+     * @return a new Hibernate session
+     */
+    public static Session getNewSession() {
+        return SESSION_FACTORY.openSession();
+    }
+
+    /**
+     * Closes the given Hibernate session.
+     *
+     * @param session the session to close
+     */
+    public static void close(Session session) {
+        if (session != null) {
+            try {
+                session.close();
+            } catch (HibernateException he) {
+                Logger.getLogger(DatabaseUtil.class.getName()).log(Level.SEVERE,
+                        "An exception occurred while closing the session.", he);
+            }
+        }
     }
 }

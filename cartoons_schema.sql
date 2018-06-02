@@ -57,11 +57,10 @@ CREATE TABLE cartoons_schema.gender (
 );
 
 CREATE TABLE cartoons_schema.character_demographic (
-	demographic_id BIGSERIAL,
+	character_id BIGINT,
 	gender VARCHAR(1) NOT NULL,
 	villain BOOLEAN,
-	character_id BIGINT,
-	CONSTRAINT PK_demographic_id PRIMARY KEY (demographic_id),
+	CONSTRAINT PK_demographic_id PRIMARY KEY (character_id),
 	CONSTRAINT FK_demographic_gender FOREIGN KEY (gender) REFERENCES cartoons_schema.gender (gender),
 	CONSTRAINT FK_demographic_character_id FOREIGN KEY (character_id) REFERENCES cartoons_schema.cartoon_character (character_id)
 );

@@ -17,20 +17,15 @@ package com.daniel.cartooncharacters.entity;
 
 import java.io.Serializable;
 import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.LongProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 /**
@@ -45,9 +40,9 @@ public class CharacterDemographic implements Serializable {
     private static final long serialVersionUID = 1044049422544578414L;
 
     /**
-     * The character demographic identifier
+     * The cartoon character for this demographic data
      */
-    private final LongProperty demographicId = new SimpleLongProperty();
+    private final ObjectProperty<CartoonCharacter> character = new SimpleObjectProperty();
 
     /**
      * The gender for a cartoon character
@@ -60,39 +55,33 @@ public class CharacterDemographic implements Serializable {
     private final BooleanProperty villain = new SimpleBooleanProperty();
 
     /**
-     * The cartoon character for this demographic data
-     */
-    private final ObjectProperty<CartoonCharacter> character = new SimpleObjectProperty();
-
-    /**
-     * Get the value of demographicId
+     * Get the value of character
      *
-     * @return the value of demographicId
+     * @return the value of character
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "DemographicSequence")
-    @SequenceGenerator(name = "DemographicSequence", sequenceName = "character_demographic_demographic_id_seq", allocationSize = 1)
-    @Column(name = "demographic_id")
-    public Long getDemographicId() {
-        return demographicId.get();
+    @OneToOne
+    @JoinColumn(name = "character_id")
+    public CartoonCharacter getCharacter() {
+        return character.get();
     }
 
     /**
-     * Set the value of demographicId
+     * Set the value of character
      *
-     * @param demographicId new value of pictureId
+     * @param character new value of character
      */
-    public void setDemographicId(Long demographicId) {
-        this.demographicId.set(demographicId);
+    public void setCharacter(CartoonCharacter character) {
+        this.character.set(character);
     }
 
     /**
-     * Get the demographicId property
+     * Get the character property
      *
-     * @return the demographicId property
+     * @return the character property
      */
-    public LongProperty demographicIdProperty() {
-        return demographicId;
+    public ObjectProperty<CartoonCharacter> characterProperty() {
+        return character;
     }
 
     /**
@@ -150,34 +139,5 @@ public class CharacterDemographic implements Serializable {
      */
     public BooleanProperty villainProperty() {
         return villain;
-    }
-
-    /**
-     * Get the value of character
-     *
-     * @return the value of character
-     */
-    @OneToOne
-    @JoinColumn(name = "character_id")
-    public CartoonCharacter getCharacter() {
-        return character.get();
-    }
-
-    /**
-     * Set the value of character
-     *
-     * @param character new value of character
-     */
-    public void setCharacter(CartoonCharacter character) {
-        this.character.set(character);
-    }
-
-    /**
-     * Get the character property
-     *
-     * @return the character property
-     */
-    public ObjectProperty<CartoonCharacter> characterProperty() {
-        return character;
     }
 }
