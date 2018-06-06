@@ -16,14 +16,19 @@
 package com.daniel.cartooncharacters.validation;
 
 import com.daniel.cartooncharacters.entity.CartoonCharacter;
+import java.io.File;
+import java.io.IOException;
+import java.util.Iterator;
 import javafx.beans.property.SimpleListProperty;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.Region;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
+import javax.imageio.stream.ImageInputStream;
 
 /**
- * This class validates input for character name, cartoon title, and result
- * selection.
+ * This class validates input for controller functions.
  *
  * @author Bryan Daniel
  */
@@ -110,7 +115,7 @@ public class InputValidator {
      */
     public boolean inputValidForCharacterCreation(String cartoonName, String locationName, String characterName,
             String characterDescription) {
-        if (cartoonName.isEmpty() || locationName.isEmpty() || characterName.isEmpty() 
+        if (cartoonName.isEmpty() || locationName.isEmpty() || characterName.isEmpty()
                 || characterDescription.isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setResizable(true);
@@ -154,5 +159,37 @@ public class InputValidator {
             return false;
         }
         return true;
+    }
+
+    /**
+     * This method ensures that the given file read from the file system is a
+     * valid image. The file format name is returned after validation.
+     *
+     * @param image the image to validate
+     * @return the format for the image file or null if validation fails
+     */
+    public String imageFileValid(File image) {
+        String formatName = null;
+        ImageInputStream imageInputStream;
+        try {
+            imageInputStream = ImageIO.createImageInputStream(image);
+            Iterator<ImageReader> imageReaders = ImageIO.getImageReaders(imageInputStream);
+            while (imageReaders.hasNext()) {
+                ImageReader reader = (ImageReader) imageReaders.next();
+                formatName = reader.getFormatName();
+            }
+            if (formatName == null) {
+                throw new IllegalArgumentException("Invalid File Format.");
+            }
+        } catch (IOException | IllegalArgumentException ex) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setResizable(true);
+            alert.setTitle("Invalid File");
+            alert.setHeaderText("File Format Not Recognized");
+            alert.setContentText("An image file must be selected.");
+            alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+            alert.showAndWait();
+        }
+        return formatName;
     }
 }

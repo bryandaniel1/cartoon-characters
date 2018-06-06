@@ -17,6 +17,7 @@ package com.daniel.cartooncharacters.task;
 
 import com.daniel.cartooncharacters.data.SimpleCharacterDataAccess;
 import com.daniel.cartooncharacters.entity.CartoonCharacter;
+import com.daniel.cartooncharacters.entity.CartoonLocation;
 import javafx.concurrent.Task;
 
 /**
@@ -31,18 +32,25 @@ public class SelectCharacterTask extends Task<CartoonCharacter> {
      * The characters found for the location
      */
     private final String characterName;
+    
+    /**
+     * The location for the character
+     */
+    private final CartoonLocation cartoonLocation;
 
     /**
      * This constructor sets the value for the instance variables.
      *
      * @param characterName the character name
+     * @param cartoonLocation the location for the character
      */
-    public SelectCharacterTask(String characterName) {
+    public SelectCharacterTask(String characterName, CartoonLocation cartoonLocation) {
         this.characterName = characterName;
+        this.cartoonLocation = cartoonLocation;
     }
 
     @Override
     protected CartoonCharacter call() throws Exception {
-        return new SimpleCharacterDataAccess().findCartoonCharacter(characterName);
+        return new SimpleCharacterDataAccess().findCartoonCharacter(characterName, cartoonLocation);
     }
 }

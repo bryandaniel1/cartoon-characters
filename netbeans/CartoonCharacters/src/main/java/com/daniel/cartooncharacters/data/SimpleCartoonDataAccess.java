@@ -63,9 +63,9 @@ public class SimpleCartoonDataAccess implements CartoonDataAccess {
         Session session = null;
         try {
             session = DatabaseUtil.getNewSession();
-            Criteria crit = session.createCriteria(Cartoon.class);
-            crit.add(Restrictions.eq("title", cartoonName));
-            cartoon = (Cartoon) crit.uniqueResult();
+            Criteria criteria = session.createCriteria(Cartoon.class);
+            criteria.add(Restrictions.eq("title", cartoonName));
+            cartoon = (Cartoon) criteria.uniqueResult();
         } catch (HibernateException he) {
             Logger.getLogger(SimpleCartoonDataAccess.class.getName()).log(Level.INFO,
                     "HibernateException exception occurred during SimpleCartoonDataAccess.findCartoon.", he);

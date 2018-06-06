@@ -27,14 +27,16 @@ INSERT INTO cartoon_character (character_name, description, character_home) VALU
 INSERT INTO character_quote (character_id, quote) VALUES (1, 'By the power of Grayskull... I have the power!'), 
 (2, 'I am not nice, I am not kind, and I am not wonderful!﻿');
 
-INSERT INTO cartoon_picture (picture_location, cartoon_id, location_id, character_id) VALUES ('/img/Masters of the Universe/masters-of-the-universe.jpg', 1, NULL, NULL), 
-('/img/Masters of the Universe/eternia.jpg', NULL, 1, NULL), ('/img/Masters of the Universe/castle-grayskull.jpg', NULL, 2, NULL), 
-('/img/Masters of the Universe/royal-palace.jpg', NULL, 3, NULL), ('/img/Masters of the Universe/snake-mountain.jpg', NULL, 4, NULL), 
-('/img/Masters of the Universe/he-man.jpg', NULL, NULL, 1), ('/img/Masters of the Universe/skeletor-attacking.jpg', NULL, NULL, 2), 
-('/img/Masters of the Universe/teela.png', NULL, NULL, 3), ('/img/Masters of the Universe/man-at-arms.jpg', NULL, NULL, 4), 
-('/img/Masters of the Universe/sorceress.png', NULL, NULL, 5), ('/img/Masters of the Universe/mer-man-vs-he-man.jpg', NULL, NULL, 6), 
-('/img/Masters of the Universe/beast-man-vs-he-man.jpg', NULL, NULL, 7), ('/img/Masters of the Universe/battle-cat-and-he-man.jpg', NULL, NULL, 1), 
-('/img/Masters of the Universe/he-man-defending-with-sword.png', NULL, NULL, 1);
+INSERT INTO cartoon_picture (picture_location, cartoon_id) VALUES ('/img/Masters of the Universe/masters-of-the-universe.jpg', 1);
+
+INSERT INTO location_picture (picture_location, location_id) VALUES ('/img/Masters of the Universe/eternia.jpg', 1), ('/img/Masters of the Universe/castle-grayskull.jpg', 2), 
+('/img/Masters of the Universe/royal-palace.jpg', 3), ('/img/Masters of the Universe/snake-mountain.jpg', 4);
+
+INSERT INTO character_picture (picture_location, character_id) VALUES ('/img/Masters of the Universe/he-man.jpg', 1), ('/img/Masters of the Universe/skeletor-attacking.jpg', 2), 
+('/img/Masters of the Universe/teela.png', 3), ('/img/Masters of the Universe/man-at-arms.jpg', 4), 
+('/img/Masters of the Universe/sorceress.png', 5), ('/img/Masters of the Universe/mer-man-vs-he-man.jpg', 6), 
+('/img/Masters of the Universe/beast-man-vs-he-man.jpg', 7), ('/img/Masters of the Universe/battle-cat-and-he-man.jpg', 1), 
+('/img/Masters of the Universe/he-man-defending-with-sword.png', 1);
 
 INSERT INTO gender (gender, description) VALUES ('M', 'male'), ('F', 'female'), ('U', 'unknown'), ('N','not applicable');
 

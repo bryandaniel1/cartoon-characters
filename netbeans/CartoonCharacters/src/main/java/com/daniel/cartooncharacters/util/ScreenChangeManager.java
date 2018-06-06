@@ -35,7 +35,7 @@ import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
 /**
- * This class controls the screen-change operations for all views.
+ * This class controls the screen-change operations for search details views.
  *
  * @author Bryan Daniel
  */

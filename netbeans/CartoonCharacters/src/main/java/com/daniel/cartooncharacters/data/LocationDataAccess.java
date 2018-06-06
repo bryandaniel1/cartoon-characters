@@ -40,10 +40,11 @@ public interface LocationDataAccess {
      * This method searches for a cartoon with a name matching the given name.
      *
      * @param locationName the name of the location
+     * @param cartoon the cartoon for the location
      * @return the cartoon location found with a name matching the specified
      * name
      */
-    public CartoonLocation findCartoonLocation(String locationName);
+    public CartoonLocation findCartoonLocation(String locationName, Cartoon cartoon);
 
     /**
      * This method adds a new cartoon location to the database.

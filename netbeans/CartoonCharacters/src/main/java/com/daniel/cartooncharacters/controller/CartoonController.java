@@ -15,10 +15,12 @@
  */
 package com.daniel.cartooncharacters.controller;
 
+import static com.daniel.cartooncharacters.controller.CharacterController.HALF_OPAQUE;
 import com.daniel.cartooncharacters.util.ScreenChangeManager;
 import com.daniel.cartooncharacters.entity.Cartoon;
 import com.daniel.cartooncharacters.entity.CartoonPicture;
 import com.daniel.cartooncharacters.task.SearchPictureTask;
+import com.daniel.cartooncharacters.util.FileUtil;
 import java.util.List;
 import javafx.beans.property.SimpleListProperty;
 import javafx.event.ActionEvent;
@@ -27,6 +29,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 
 /**
  * This controller provides data for the detailed view of a cartoon.
@@ -72,6 +75,18 @@ public class CartoonController {
     private ImageView cartoonImage;
 
     /**
+     * The right picture navigation arrow
+     */
+    @FXML
+    private Button rightArrowButton;
+
+    /**
+     * The left picture navigation arrow
+     */
+    @FXML
+    private Button leftArrowButton;
+
+    /**
      * The cartoon to view
      */
     private final Cartoon cartoon;
@@ -85,6 +100,11 @@ public class CartoonController {
      * The list of pictures to show in the cartoon details view
      */
     private final SimpleListProperty pictureList = new SimpleListProperty();
+
+    /**
+     * The index of the picture shown
+     */
+    private int currentPictureIndex;
 
     /**
      * This constructor sets the value for the cartoon to view and the value for
@@ -111,10 +131,15 @@ public class CartoonController {
                 SearchPictureTask.PictureType.CARTOON);
         pictureList.bind(task.valueProperty());
         pictureList.addListener((observable, oldValue, newValue) -> {
+            currentPictureIndex = 0;
             pictureLocationTextArea.setText(((List<CartoonPicture>) newValue).get(0).getPictureLocation());
+            if (pictureList.size() > 1) {
+                rightArrowButton.setDisable(false);
+                rightArrowButton.setVisible(true);
+            }
         });
         pictureLocationTextArea.textProperty().addListener((observable, oldValue, newValue) -> {
-            cartoonImage.setImage(new Image(HomeController.class.getResourceAsStream(newValue)));
+            cartoonImage.setImage(new Image(FileUtil.getImageFile(newValue).toURI().toString()));
         });
         cartoonHideButton.setOnAction((event) -> this.handleCartoonHide(event));
 
@@ -130,5 +155,59 @@ public class CartoonController {
      */
     private void handleCartoonHide(ActionEvent event) {
         screenChangeManager.hideCartoonDetails(event);
+    }
+
+    /**
+     * Handles the mouse entered event for a button.
+     *
+     * @param event the mouse event to handle
+     */
+    @FXML
+    void handleMouseEntered(MouseEvent event) {
+        ((Button) event.getTarget()).setOpacity(HALF_OPAQUE);
+    }
+
+    /**
+     * Handles the mouse exited event for a button.
+     *
+     * @param event the mouse event to handle
+     */
+    @FXML
+    void handleMouseExited(MouseEvent event) {
+        ((Button) event.getTarget()).setOpacity(0);
+    }
+
+    /**
+     * Handles the mouse click event for the the left arrow button.
+     *
+     * @param event the mouse event to handle
+     */
+    @FXML
+    void handleLeftArrowClick(ActionEvent event) {
+        pictureLocationTextArea.setText(((CartoonPicture) pictureList.get(--currentPictureIndex))
+                .getPictureLocation());
+        rightArrowButton.setDisable(false);
+        rightArrowButton.setVisible(true);
+        if (currentPictureIndex == 0) {
+            leftArrowButton.setDisable(true);
+            leftArrowButton.setVisible(false);
+        }
+    }
+
+    /**
+     * Handles the mouse click event for the the right arrow button.
+     *
+     * @param event the mouse event to handle
+     */
+    @FXML
+    void handleRightArrowClick(ActionEvent event) {
+        pictureLocationTextArea.setText(((CartoonPicture) pictureList.get(++currentPictureIndex))
+                .getPictureLocation());
+        leftArrowButton.setDisable(false);
+        leftArrowButton.setVisible(true);
+        if (pictureList.size() <= (currentPictureIndex + 1)) {
+            rightArrowButton.setDisable(true);
+            rightArrowButton.setVisible(false);
+        }
     }
 }

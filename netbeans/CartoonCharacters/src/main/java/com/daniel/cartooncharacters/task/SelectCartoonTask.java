@@ -23,11 +23,12 @@ import javafx.concurrent.Task;
 import javafx.scene.control.ComboBox;
 
 /**
- * Handles the selection of a cartoon to populate a location name combo box.
+ * Handles the selection of a cartoon to populate a location name combo box and
+ * return the cartoon entity.
  *
  * @author Bryan Daniel
  */
-public class SelectCartoonTask extends Task<Void> {
+public class SelectCartoonTask extends Task<Cartoon> {
 
     /**
      * The combo box for the location selection
@@ -56,10 +57,10 @@ public class SelectCartoonTask extends Task<Void> {
     }
 
     @Override
-    protected Void call() throws Exception {
+    protected Cartoon call() throws Exception {
         Cartoon cartoon = new SimpleCartoonDataAccess().findCartoon(cartoonName);
         locations = new SimpleLocationDataAccess().findCartoonLocationNames(cartoon);
-        return null;
+        return cartoon;
     }
 
     @Override

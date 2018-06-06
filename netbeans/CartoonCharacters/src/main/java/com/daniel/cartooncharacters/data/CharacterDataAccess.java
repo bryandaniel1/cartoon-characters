@@ -43,10 +43,11 @@ public interface CharacterDataAccess {
      * name.
      *
      * @param characterName the name of the character
+     * @param cartoonLocation the character's location
      * @return the cartoon character found with a name matching the specified
      * name
      */
-    public CartoonCharacter findCartoonCharacter(String characterName);
+    public CartoonCharacter findCartoonCharacter(String characterName, CartoonLocation cartoonLocation);
 
     /**
      * This method search for and returns character names associated with the

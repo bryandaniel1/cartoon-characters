@@ -17,6 +17,7 @@ package com.daniel.cartooncharacters.task;
 
 import com.daniel.cartooncharacters.data.SimpleCharacterDataAccess;
 import com.daniel.cartooncharacters.data.SimpleLocationDataAccess;
+import com.daniel.cartooncharacters.entity.Cartoon;
 import com.daniel.cartooncharacters.entity.CartoonLocation;
 import java.util.List;
 import javafx.concurrent.Task;
@@ -24,11 +25,11 @@ import javafx.scene.control.ComboBox;
 
 /**
  * Handles the selection of a cartoon location to populate a combo box for
- * character selection.
+ * character selection and return the location entity.
  *
  * @author Bryan Daniel
  */
-public class SelectLocationTask extends Task<Void> {
+public class SelectLocationTask extends Task<CartoonLocation> {
 
     /**
      * The combo box for the character selection
@@ -46,21 +47,28 @@ public class SelectLocationTask extends Task<Void> {
     private List<String> characterNames;
 
     /**
+     * The cartoon for the location
+     */
+    private final Cartoon cartoon;
+
+    /**
      * This constructor sets the value for the instance variables.
      *
      * @param locationName the name of the location
      * @param characterName the character name combo box
+     * @param cartoon the cartoon for the location
      */
-    public SelectLocationTask(String locationName, ComboBox<String> characterName) {
+    public SelectLocationTask(String locationName, ComboBox<String> characterName, Cartoon cartoon) {
         this.locationName = locationName;
         this.characterNameComboBox = characterName;
+        this.cartoon = cartoon;
     }
 
     @Override
-    protected Void call() throws Exception {
-        CartoonLocation location = new SimpleLocationDataAccess().findCartoonLocation(locationName);
+    protected CartoonLocation call() throws Exception {
+        CartoonLocation location = new SimpleLocationDataAccess().findCartoonLocation(locationName, cartoon);
         characterNames = new SimpleCharacterDataAccess().findCartoonCharacterNames(location);
-        return null;
+        return location;
     }
 
     @Override

@@ -15,15 +15,17 @@
  */
 package com.daniel.cartooncharacters.data;
 
-import com.daniel.cartooncharacters.entity.CartoonPicture;
+import com.daniel.cartooncharacters.entity.CartoonCharacter;
+import com.daniel.cartooncharacters.entity.CharacterPicture;
 import com.daniel.cartooncharacters.util.DatabaseUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 /**
  * This PictureDataAccess implementation provides the functionality for
@@ -32,7 +34,7 @@ import org.hibernate.Session;
  *
  * @author Bryan Daniel
  */
-public class CharacterPictureDataAccess implements PictureDataAccess {
+public class CharacterPictureDataAccess {
 
     /**
      * This method searches for pictures associated with a cartoon character.
@@ -41,24 +43,17 @@ public class CharacterPictureDataAccess implements PictureDataAccess {
      * @return the list of pictures found with character identifiers matching
      * the parameter
      */
-    @Override
-    public List<CartoonPicture> findPictures(Long entityIdentifier) {
+    public List<CharacterPicture> findPictures(Long entityIdentifier) {
 
-        ArrayList<CartoonPicture> pictures = new ArrayList<>();
+        ArrayList<CharacterPicture> pictures = new ArrayList<>();
         Session session = null;
         try {
-            StringBuilder queryString = new StringBuilder();
-            queryString.append("SELECT picture ");
-            queryString.append("FROM CartoonPicture picture ");
-            queryString.append("WHERE picture.cartoonCharacter.characterId = :characterId ");
-
             session = DatabaseUtil.getNewSession();
-            Query query = session.createQuery(queryString.toString());
-            query.setLong("characterId", entityIdentifier);
-
-            List list = query.list();
+            Criteria criteria = session.createCriteria(CharacterPicture.class);
+            criteria.add(Restrictions.eq("cartoonCharacter.characterId", entityIdentifier));
+            List list = criteria.list();
             list.forEach((o) -> {
-                pictures.add((CartoonPicture) o);
+                pictures.add((CharacterPicture) o);
             });
 
         } catch (HibernateException he) {
@@ -71,5 +66,60 @@ public class CharacterPictureDataAccess implements PictureDataAccess {
             DatabaseUtil.close(session);
         }
         return pictures;
+    }
+
+    /**
+     * Finds and returns the cartoon character picture with values matching the
+     * given image location and cartoon character.
+     *
+     * @param newImagePath the image location
+     * @param cartoonCharacter the cartoon character
+     * @return the picture found
+     */
+    public CharacterPicture findCharacterPicture(String newImagePath, CartoonCharacter cartoonCharacter) {
+        CharacterPicture characterPictureFound = null;
+        Session session = null;
+        try {
+            session = DatabaseUtil.getNewSession();
+            Criteria criteria = session.createCriteria(CharacterPicture.class);
+            criteria.add(Restrictions.eq("pictureLocation", newImagePath));
+            criteria.add(Restrictions.eq("cartoonCharacter", cartoonCharacter));
+            characterPictureFound = (CharacterPicture) criteria.uniqueResult();
+        } catch (HibernateException he) {
+            Logger.getLogger(CharacterPictureDataAccess.class.getName()).log(Level.INFO,
+                    "HibernateException exception occurred during CharacterPictureDataAccess.findCharacterPicture.", he);
+        } catch (Exception e) {
+            Logger.getLogger(CharacterPictureDataAccess.class.getName()).log(Level.INFO,
+                    "Exception occurred during CharacterPictureDataAccess.findCharacterPicture.", e);
+        } finally {
+            DatabaseUtil.close(session);
+        }
+        return characterPictureFound;
+    }
+
+    /**
+     * This method adds a new character picture record to the database.
+     *
+     * @param picture the character picture to add
+     * @return true if successful, false otherwise
+     */
+    public boolean savePicture(CharacterPicture picture) {
+        Session session = null;
+        try {
+            session = DatabaseUtil.getNewSession();
+            session.getTransaction().begin();
+            session.persist((CharacterPicture) picture);
+            session.getTransaction().commit();
+            return true;
+        } catch (HibernateException he) {
+            Logger.getLogger(CartoonPictureDataAccess.class.getName()).log(Level.INFO,
+                    "HibernateException exception occurred during CharacterPictureDataAccess.savePicture.", he);
+        } catch (Exception e) {
+            Logger.getLogger(CartoonPictureDataAccess.class.getName()).log(Level.INFO,
+                    "Exception occurred during CharacterPictureDataAccess.savePicture.", e);
+        } finally {
+            DatabaseUtil.close(session);
+        }
+        return false;
     }
 }

@@ -20,7 +20,9 @@ import com.daniel.cartooncharacters.entity.CartoonCharacter;
 import com.daniel.cartooncharacters.entity.CartoonLocation;
 import com.daniel.cartooncharacters.entity.CartoonPicture;
 import com.daniel.cartooncharacters.entity.CharacterDemographic;
+import com.daniel.cartooncharacters.entity.CharacterPicture;
 import com.daniel.cartooncharacters.entity.Gender;
+import com.daniel.cartooncharacters.entity.LocationPicture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.hibernate.HibernateException;
@@ -57,6 +59,8 @@ public class DatabaseUtil {
         config.addAnnotatedClass(CartoonLocation.class);
         config.addAnnotatedClass(CartoonCharacter.class);
         config.addAnnotatedClass(CartoonPicture.class);
+        config.addAnnotatedClass(LocationPicture.class);
+        config.addAnnotatedClass(CharacterPicture.class);
         config.addAnnotatedClass(Gender.class);
         config.addAnnotatedClass(CharacterDemographic.class);
         config.setProperty("hibernate.connection.driver_class", "org.postgresql.Driver");

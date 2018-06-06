@@ -59,14 +59,15 @@ public class SimpleLocationDataAccess implements LocationDataAccess {
     }
 
     @Override
-    public CartoonLocation findCartoonLocation(String locationName) {
+    public CartoonLocation findCartoonLocation(String locationName, Cartoon cartoon) {
         CartoonLocation cartoonLocation = null;
         Session session = null;
         try {
             session = DatabaseUtil.getNewSession();
-            Criteria crit = session.createCriteria(CartoonLocation.class);
-            crit.add(Restrictions.ilike("locationName", locationName));
-            cartoonLocation = (CartoonLocation) crit.uniqueResult();
+            Criteria criteria = session.createCriteria(CartoonLocation.class);
+            criteria.add(Restrictions.ilike("locationName", locationName))
+                    .add(Restrictions.eq("cartoon", cartoon));
+            cartoonLocation = (CartoonLocation) criteria.uniqueResult();
         } catch (HibernateException he) {
             Logger.getLogger(SimpleLocationDataAccess.class.getName()).log(Level.INFO,
                     "HibernateException exception occurred during SimpleLocationDataAccess.findCartoonLocation.", he);

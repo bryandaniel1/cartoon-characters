@@ -18,6 +18,7 @@ package com.daniel.cartooncharacters.task;
 import com.daniel.cartooncharacters.data.CharacterDataAccess;
 import com.daniel.cartooncharacters.data.SimpleCharacterDataAccess;
 import com.daniel.cartooncharacters.entity.CartoonCharacter;
+import com.daniel.cartooncharacters.entity.CartoonLocation;
 import com.daniel.cartooncharacters.entity.CharacterDemographic;
 import com.daniel.cartooncharacters.util.MessageStage;
 import javafx.concurrent.Task;
@@ -35,6 +36,11 @@ public class SaveCharacterTask extends Task<Void> {
      * The cartoon character to add
      */
     private final CartoonCharacter character;
+
+    /**
+     * The location for the character
+     */
+    private final CartoonLocation cartoonLocation;
 
     /**
      * The demographic data for the character
@@ -55,17 +61,21 @@ public class SaveCharacterTask extends Task<Void> {
      * This constructor sets the value for the instance variables.
      *
      * @param character the character to add
+     * @param cartoonLocation the location for the character
      * @param characterDemographic the demographic data for the character
      */
-    public SaveCharacterTask(CartoonCharacter character, CharacterDemographic characterDemographic) {
+    public SaveCharacterTask(CartoonCharacter character, CartoonLocation cartoonLocation,
+            CharacterDemographic characterDemographic) {
         this.character = character;
+        this.cartoonLocation = cartoonLocation;
         this.characterDemographic = characterDemographic;
         dataAccess = new SimpleCharacterDataAccess();
     }
 
     @Override
     protected Void call() throws Exception {
-        CartoonCharacter existingCharacter = dataAccess.findCartoonCharacter(character.getCharacterName());
+        CartoonCharacter existingCharacter = dataAccess.findCartoonCharacter(character.getCharacterName(),
+                cartoonLocation);
         if (existingCharacter != null) {
             successful = false;
         } else {

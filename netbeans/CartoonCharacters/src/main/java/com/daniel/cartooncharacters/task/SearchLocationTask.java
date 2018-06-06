@@ -17,6 +17,7 @@ package com.daniel.cartooncharacters.task;
 
 import com.daniel.cartooncharacters.data.LocationDataAccess;
 import com.daniel.cartooncharacters.data.SimpleLocationDataAccess;
+import com.daniel.cartooncharacters.entity.Cartoon;
 import com.daniel.cartooncharacters.entity.CartoonLocation;
 import javafx.concurrent.Task;
 import javafx.scene.control.TextArea;
@@ -56,20 +57,27 @@ public class SearchLocationTask extends Task<Void> {
     private CartoonLocation cartoonLocation;
 
     /**
+     * The cartoon for the location
+     */
+    private final Cartoon cartoon;
+
+    /**
      * This constructor sets the value for the instance variables.
      *
      * @param locationName the location name
      * @param locationDescription the location description
+     * @param cartoon the cartoon for the location
      */
-    public SearchLocationTask(String locationName, TextArea locationDescription) {
+    public SearchLocationTask(String locationName, TextArea locationDescription, Cartoon cartoon) {
         this.locationName = locationName;
         this.locationDescription = locationDescription;
+        this.cartoon = cartoon;
         dataAccess = new SimpleLocationDataAccess();
     }
 
     @Override
     protected Void call() throws Exception {
-        cartoonLocation = dataAccess.findCartoonLocation(locationName);
+        cartoonLocation = dataAccess.findCartoonLocation(locationName, cartoon);
         successful = cartoonLocation != null;
         return null;
     }

@@ -15,15 +15,18 @@
  */
 package com.daniel.cartooncharacters.data;
 
+import com.daniel.cartooncharacters.entity.CartoonLocation;
 import com.daniel.cartooncharacters.entity.CartoonPicture;
+import com.daniel.cartooncharacters.entity.LocationPicture;
 import com.daniel.cartooncharacters.util.DatabaseUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
-import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 /**
  * This PictureDataAccess implementation provides the functionality for
@@ -32,7 +35,7 @@ import org.hibernate.Session;
  *
  * @author Bryan Daniel
  */
-public class LocationPictureDataAccess implements PictureDataAccess {
+public class LocationPictureDataAccess {
 
     /**
      * This method searches for pictures associated with a cartoon location.
@@ -41,24 +44,17 @@ public class LocationPictureDataAccess implements PictureDataAccess {
      * @return the list of pictures found with location identifiers matching the
      * parameter
      */
-    @Override
-    public List<CartoonPicture> findPictures(Long entityIdentifier) {
+    public List<LocationPicture> findPictures(Long entityIdentifier) {
 
-        ArrayList<CartoonPicture> pictures = new ArrayList<>();
+        ArrayList<LocationPicture> pictures = new ArrayList<>();
         Session session = null;
         try {
-            StringBuilder queryString = new StringBuilder();
-            queryString.append("SELECT picture ");
-            queryString.append("FROM CartoonPicture picture ");
-            queryString.append("WHERE picture.cartoonLocation.locationId = :locationId ");
-
             session = DatabaseUtil.getNewSession();
-            Query query = session.createQuery(queryString.toString());
-            query.setLong("locationId", entityIdentifier);
-
-            List list = query.list();
+            Criteria criteria = session.createCriteria(LocationPicture.class);
+            criteria.add(Restrictions.eq("cartoonLocation.locationId", entityIdentifier));
+            List list = criteria.list();
             list.forEach((o) -> {
-                pictures.add((CartoonPicture) o);
+                pictures.add((LocationPicture) o);
             });
         } catch (HibernateException he) {
             Logger.getLogger(LocationPictureDataAccess.class.getName()).log(Level.INFO,
@@ -70,5 +66,60 @@ public class LocationPictureDataAccess implements PictureDataAccess {
             DatabaseUtil.close(session);
         }
         return pictures;
+    }
+
+    /**
+     * Finds and returns the cartoon location picture with values matching the
+     * given image location and cartoon location.
+     *
+     * @param newImagePath the image location
+     * @param cartoonLocation the cartoon location
+     * @return the picture found
+     */
+    public LocationPicture findLocationPicture(String newImagePath, CartoonLocation cartoonLocation) {
+        LocationPicture locationPictureFound = null;
+        Session session = null;
+        try {
+            session = DatabaseUtil.getNewSession();
+            Criteria criteria = session.createCriteria(LocationPicture.class);
+            criteria.add(Restrictions.eq("pictureLocation", newImagePath));
+            criteria.add(Restrictions.eq("cartoonLocation", cartoonLocation));
+            locationPictureFound = (LocationPicture) criteria.uniqueResult();
+        } catch (HibernateException he) {
+            Logger.getLogger(LocationPictureDataAccess.class.getName()).log(Level.INFO,
+                    "HibernateException exception occurred during LocationPictureDataAccess.findLocationPicture.", he);
+        } catch (Exception e) {
+            Logger.getLogger(LocationPictureDataAccess.class.getName()).log(Level.INFO,
+                    "Exception occurred during LocationPictureDataAccess.findLocationPicture.", e);
+        } finally {
+            DatabaseUtil.close(session);
+        }
+        return locationPictureFound;
+    }
+
+    /**
+     * This method adds a new location picture record to the database.
+     *
+     * @param picture the location picture to add
+     * @return true if successful, false otherwise
+     */
+    public boolean savePicture(LocationPicture picture) {
+        Session session = null;
+        try {
+            session = DatabaseUtil.getNewSession();
+            session.getTransaction().begin();
+            session.persist((LocationPicture) picture);
+            session.getTransaction().commit();
+            return true;
+        } catch (HibernateException he) {
+            Logger.getLogger(CartoonPictureDataAccess.class.getName()).log(Level.INFO,
+                    "HibernateException exception occurred during LocationPictureDataAccess.savePicture.", he);
+        } catch (Exception e) {
+            Logger.getLogger(CartoonPictureDataAccess.class.getName()).log(Level.INFO,
+                    "Exception occurred during LocationPictureDataAccess.savePicture.", e);
+        } finally {
+            DatabaseUtil.close(session);
+        }
+        return false;
     }
 }

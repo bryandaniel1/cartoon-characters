@@ -18,7 +18,8 @@ CREATE TABLE cartoons_schema.cartoon_location (
 	description VARCHAR(1000),
 	cartoon_id BIGINT NOT NULL,
 	CONSTRAINT PK_location_id PRIMARY KEY (location_id),
-	CONSTRAINT FK_cartoon_id FOREIGN KEY (cartoon_id) REFERENCES cartoons_schema.cartoon (cartoon_id)
+	CONSTRAINT FK_cartoon_id FOREIGN KEY (cartoon_id) REFERENCES cartoons_schema.cartoon (cartoon_id), 
+	CONSTRAINT UK_location_cartoon UNIQUE (location_name, cartoon_id)
 );
 
 CREATE TABLE cartoons_schema.cartoon_character (
@@ -27,7 +28,8 @@ CREATE TABLE cartoons_schema.cartoon_character (
 	description VARCHAR(1000),
 	character_home BIGINT NOT NULL,
 	CONSTRAINT PK_character_id PRIMARY KEY (character_id),
-	CONSTRAINT FK_character_home FOREIGN KEY (character_home) REFERENCES cartoons_schema.cartoon_location (location_id)
+	CONSTRAINT FK_character_home FOREIGN KEY (character_home) REFERENCES cartoons_schema.cartoon_location (location_id), 
+	CONSTRAINT UK_character_location UNIQUE (character_name, character_home)
 );
 
 CREATE TABLE cartoons_schema.character_quote (
@@ -41,13 +43,28 @@ CREATE TABLE cartoons_schema.character_quote (
 CREATE TABLE cartoons_schema.cartoon_picture (
 	picture_id BIGSERIAL,
 	picture_location VARCHAR(100) NOT NULL,
-	cartoon_id BIGINT,
-	location_id BIGINT,
-	character_id BIGINT,
-	CONSTRAINT PK_picture_id PRIMARY KEY (picture_id),
-	CONSTRAINT FK_picture_cartoon_id FOREIGN KEY (cartoon_id) REFERENCES cartoons_schema.cartoon (cartoon_id),
-	CONSTRAINT FK_picture_location_id FOREIGN KEY (location_id) REFERENCES cartoons_schema.cartoon_location (location_id),
-	CONSTRAINT FK_picture_character_id FOREIGN KEY (character_id) REFERENCES cartoons_schema.cartoon_character (character_id)
+	cartoon_id BIGINT NOT NULL,
+	CONSTRAINT PK_cartoon_picture PRIMARY KEY (picture_id),
+	CONSTRAINT FK_picture_cartoon_id FOREIGN KEY (cartoon_id) REFERENCES cartoons_schema.cartoon (cartoon_id), 
+	CONSTRAINT UK_picture_cartoon_id UNIQUE (picture_location, cartoon_id)
+);
+
+CREATE TABLE cartoons_schema.location_picture (
+	picture_id BIGSERIAL,
+	picture_location VARCHAR(100) NOT NULL,
+	location_id BIGINT NOT NULL,
+	CONSTRAINT PK_location_picture PRIMARY KEY (picture_id),
+	CONSTRAINT FK_picture_location_id FOREIGN KEY (location_id) REFERENCES cartoons_schema.cartoon_location (location_id), 
+	CONSTRAINT UK_picture_location_id UNIQUE (picture_location, location_id)
+);
+
+CREATE TABLE cartoons_schema.character_picture (
+	picture_id BIGSERIAL,
+	picture_location VARCHAR(100) NOT NULL,
+	character_id BIGINT NOT NULL,
+	CONSTRAINT PK_character_picture PRIMARY KEY (picture_id),
+	CONSTRAINT FK_picture_character_id FOREIGN KEY (character_id) REFERENCES cartoons_schema.cartoon_character (character_id), 
+	CONSTRAINT UK_picture_character_id UNIQUE (picture_location, character_id)
 );
 
 CREATE TABLE cartoons_schema.gender (

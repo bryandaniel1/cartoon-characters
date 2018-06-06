@@ -18,8 +18,9 @@ package com.daniel.cartooncharacters.task;
 import com.daniel.cartooncharacters.data.CartoonPictureDataAccess;
 import com.daniel.cartooncharacters.data.CharacterPictureDataAccess;
 import com.daniel.cartooncharacters.data.LocationPictureDataAccess;
-import com.daniel.cartooncharacters.data.PictureDataAccess;
 import com.daniel.cartooncharacters.entity.CartoonPicture;
+import com.daniel.cartooncharacters.entity.CharacterPicture;
+import com.daniel.cartooncharacters.entity.LocationPicture;
 import java.util.List;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
@@ -42,19 +43,9 @@ public class SearchPictureTask extends Task<SimpleListProperty> {
     }
 
     /**
-     * The list of pictures to show in the search results table
-     */
-    private final ObservableList<CartoonPicture> pictureList = FXCollections.observableArrayList();
-
-    /**
      * The last name to search
      */
     private final Long entityIdentifier;
-
-    /**
-     * The data access object to retrieve pictures
-     */
-    private PictureDataAccess dataAccess;
 
     /**
      * The type of picture
@@ -70,19 +61,6 @@ public class SearchPictureTask extends Task<SimpleListProperty> {
     public SearchPictureTask(Long entityIdentifier, PictureType type) {
         this.entityIdentifier = entityIdentifier;
         this.type = type;
-        switch (type) {
-            case CARTOON:
-                dataAccess = new CartoonPictureDataAccess();
-                break;
-            case LOCATION:
-                dataAccess = new LocationPictureDataAccess();
-                break;
-            case CHARACTER:
-                dataAccess = new CharacterPictureDataAccess();
-                break;
-            default:
-                break;
-        }
     }
 
     /**
@@ -95,10 +73,29 @@ public class SearchPictureTask extends Task<SimpleListProperty> {
      */
     @Override
     protected SimpleListProperty call() throws Exception {
-        if (dataAccess != null) {
-            List<CartoonPicture> matchingPictures = dataAccess.findPictures(entityIdentifier);
-            pictureList.addAll(matchingPictures);
+        SimpleListProperty searchResults = null;
+        switch (type) {
+            case CARTOON:
+                List<CartoonPicture> matchingPictures = new CartoonPictureDataAccess().findPictures(entityIdentifier);
+                ObservableList<CartoonPicture> pictureList = FXCollections.observableArrayList();
+                pictureList.addAll(matchingPictures);
+                searchResults = new SimpleListProperty(pictureList);
+                break;
+            case LOCATION:
+                List<LocationPicture> locationPictures = new LocationPictureDataAccess().findPictures(entityIdentifier);
+                ObservableList<LocationPicture> locationPictureList = FXCollections.observableArrayList();
+                locationPictureList.addAll(locationPictures);
+                searchResults = new SimpleListProperty(locationPictureList);
+                break;
+            case CHARACTER:
+                List<CharacterPicture> characterPictures = new CharacterPictureDataAccess().findPictures(entityIdentifier);
+                ObservableList<CharacterPicture> characterPictureList = FXCollections.observableArrayList();
+                characterPictureList.addAll(characterPictures);
+                searchResults = new SimpleListProperty(characterPictureList);
+                break;
+            default:
+                break;
         }
-        return new SimpleListProperty(pictureList);
+        return searchResults;
     }
 }

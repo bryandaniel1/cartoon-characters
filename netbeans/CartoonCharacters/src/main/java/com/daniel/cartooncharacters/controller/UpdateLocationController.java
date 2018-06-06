@@ -16,12 +16,14 @@
 package com.daniel.cartooncharacters.controller;
 
 import com.daniel.cartooncharacters.data.SimpleCartoonDataAccess;
+import com.daniel.cartooncharacters.entity.Cartoon;
 import com.daniel.cartooncharacters.task.SelectCartoonTask;
 import com.daniel.cartooncharacters.task.SearchLocationTask;
 import com.daniel.cartooncharacters.task.UpdateLocationTask;
 import com.daniel.cartooncharacters.validation.InputValidator;
-import java.util.ArrayList;
 import java.util.List;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -56,6 +58,11 @@ public class UpdateLocationController {
     private TextArea locationDescriptionTextArea;
 
     /**
+     * The property for the cartoon
+     */
+    private ObjectProperty<Cartoon> cartoon;
+
+    /**
      * The input validation object
      */
     private InputValidator validator;
@@ -67,6 +74,7 @@ public class UpdateLocationController {
     @FXML
     public void initialize() {
         validator = new InputValidator();
+        cartoon = new SimpleObjectProperty();
         locationNameComboBox.getItems().clear();
         locationNameComboBox.setDisable(true);
         locationDescriptionTextArea.clear();
@@ -116,7 +124,7 @@ public class UpdateLocationController {
     private void createListeners() {
         locationNameComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null && !newValue.isEmpty()) {
-                SearchLocationTask task = new SearchLocationTask(newValue, locationDescriptionTextArea);
+                SearchLocationTask task = new SearchLocationTask(newValue, locationDescriptionTextArea, cartoon.get());
                 Thread thread = new Thread(task);
                 thread.start();
                 locationDescriptionTextArea.clear();
@@ -126,6 +134,7 @@ public class UpdateLocationController {
         cartoonNameComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null && !newValue.isEmpty()) {
                 SelectCartoonTask task = new SelectCartoonTask(newValue, locationNameComboBox);
+                cartoon.bind(task.valueProperty());
                 Thread thread = new Thread(task);
                 thread.start();
                 locationNameComboBox.setDisable(false);

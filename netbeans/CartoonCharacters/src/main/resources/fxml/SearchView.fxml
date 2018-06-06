@@ -51,7 +51,7 @@
                             <MenuItem mnemonicParsing="false" onAction="#handleAddCartoon" text="Cartoon" />
                               <MenuItem mnemonicParsing="false" onAction="#handleAddLocation" text="Location" />
                               <MenuItem mnemonicParsing="false" onAction="#handleAddCharacter" text="Character" />
-                              <MenuItem mnemonicParsing="false" text="Picture" />
+                              <MenuItem mnemonicParsing="false" onAction="#handleAddPicture" text="Picture" />
                           </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Update">
@@ -59,7 +59,11 @@
                             <MenuItem mnemonicParsing="false" onAction="#handleUpdateCartoon" text="Cartoon" />
                               <MenuItem mnemonicParsing="false" onAction="#handleUpdateLocation" text="Location" />
                               <MenuItem mnemonicParsing="false" onAction="#handleUpdateCharacter" text="Character" />
-                              <MenuItem mnemonicParsing="false" text="Picture" />
+                          </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Delete">
+                          <items>
+                            <MenuItem mnemonicParsing="false" onAction="#handleDeletePicture" text="Picture" />
                           </items>
                         </Menu>
                         <MenuItem mnemonicParsing="false" onAction="#handleCloseAction" text="Close" />

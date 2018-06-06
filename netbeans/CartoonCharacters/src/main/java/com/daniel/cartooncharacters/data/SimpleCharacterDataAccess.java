@@ -83,14 +83,15 @@ public class SimpleCharacterDataAccess implements CharacterDataAccess {
     }
 
     @Override
-    public CartoonCharacter findCartoonCharacter(String characterName) {
+    public CartoonCharacter findCartoonCharacter(String characterName, CartoonLocation cartoonLocation) {
         CartoonCharacter cartoonCharacter = null;
         Session session = null;
         try {
             session = DatabaseUtil.getNewSession();
-            Criteria crit = session.createCriteria(CartoonCharacter.class);
-            crit.add(Restrictions.eq("characterName", characterName));
-            cartoonCharacter = (CartoonCharacter) crit.uniqueResult();
+            Criteria criteria = session.createCriteria(CartoonCharacter.class);
+            criteria.add(Restrictions.eq("characterName", characterName))
+                    .add(Restrictions.eq("characterHome", cartoonLocation));
+            cartoonCharacter = (CartoonCharacter) criteria.uniqueResult();
         } catch (HibernateException he) {
             Logger.getLogger(SimpleCharacterDataAccess.class.getName()).log(Level.INFO,
                     "HibernateException exception occurred during SimpleCharacterDataAccess.findCartoonCharacter.", he);
@@ -102,7 +103,7 @@ public class SimpleCharacterDataAccess implements CharacterDataAccess {
         }
         return cartoonCharacter;
     }
-    
+
     @Override
     public List<String> findCartoonCharacterNames(CartoonLocation cartoonLocation) {
         List<String> cartoonCharacterNames = null;
@@ -110,7 +111,7 @@ public class SimpleCharacterDataAccess implements CharacterDataAccess {
         try {
             session = DatabaseUtil.getNewSession();
             cartoonCharacterNames = session.createCriteria(CartoonCharacter.class)
-                    .add(Restrictions.eq("characterHome.locationId", cartoonLocation.getLocationId()))
+                    .add(Restrictions.eq("characterHome", cartoonLocation))
                     .setProjection(Projections.property("characterName"))
                     .list();
         } catch (HibernateException he) {

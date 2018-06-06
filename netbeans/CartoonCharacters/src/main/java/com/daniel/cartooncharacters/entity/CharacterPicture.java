@@ -33,15 +33,15 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 /**
- * This class holds details for a cartoon picture.
+ * This class holds details for a cartoon character picture.
  * 
  * @author Bryan Daniel
  */
 @Entity
-@Table(name = "cartoon_picture")
-public class CartoonPicture implements Serializable {
+@Table(name = "character_picture")
+public class CharacterPicture implements Serializable {
 
-    private static final long serialVersionUID = 797619848431506038L;
+    private static final long serialVersionUID = -6996640209073489349L;
     
     /**
      * The cartoon picture identifier
@@ -54,9 +54,9 @@ public class CartoonPicture implements Serializable {
     private final StringProperty pictureLocation = new SimpleStringProperty();
     
     /**
-     * The cartoon associated with this picture
+     * The cartoon character associated with this picture
      */
-    private final ObjectProperty<Cartoon> cartoon = new SimpleObjectProperty<>();
+    private final ObjectProperty<CartoonCharacter> cartoonCharacter = new SimpleObjectProperty<>();
     
     /**
      * Get the value of pictureId
@@ -64,8 +64,8 @@ public class CartoonPicture implements Serializable {
      * @return the value of pictureId
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CartoonPictureSequence")
-    @SequenceGenerator(name = "CartoonPictureSequence", sequenceName = "cartoon_picture_picture_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "CharacterPictureSequence")
+    @SequenceGenerator(name = "CharacterPictureSequence", sequenceName = "character_picture_picture_id_seq", allocationSize = 1)
     @Column(name = "picture_id")
     public Long getPictureId() {
         return pictureId.get();
@@ -118,31 +118,31 @@ public class CartoonPicture implements Serializable {
     }
 
     /**
-     * Get the value of cartoon
+     * Get the value of cartoonCharacter
      *
-     * @return the value of cartoon
+     * @return the value of cartoonCharacter
      */
     @ManyToOne
-    @JoinColumn(name="cartoon_id")
-    public Cartoon getCartoon() {
-        return cartoon.get();
+    @JoinColumn(name = "character_id")
+    public CartoonCharacter getCartoonCharacter() {
+        return cartoonCharacter.get();
     }
 
     /**
-     * Set the value of cartoon
+     * Set the value of cartoonCharacter
      *
-     * @param cartoon new value of cartoon
+     * @param cartoonCharacter new value of cartoonCharacter
      */
-    public void setCartoon(Cartoon cartoon) {
-        this.cartoon.set(cartoon);
+    public void setCartoonCharacter(CartoonCharacter cartoonCharacter) {
+        this.cartoonCharacter.set(cartoonCharacter);
     }
 
     /**
-     * Get the cartoon property
+     * Get the cartoonCharacter property
      *
-     * @return the cartoon property
+     * @return the cartoonCharacter property
      */
-    public ObjectProperty<Cartoon> cartoonProperty() {
-        return cartoon;
+    public ObjectProperty<CartoonCharacter> cartoonCharacterProperty() {
+        return cartoonCharacter;
     }
 }

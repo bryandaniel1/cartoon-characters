@@ -333,6 +333,50 @@ public class SearchController {
     }
 
     /**
+     * Handles the action for the menu option to add a new picture to the
+     * cartoon database.
+     *
+     * @param event the action event
+     */
+    @FXML
+    public void handleAddPicture(ActionEvent event) {
+        Stage addPictureStage = new Stage();
+        addPictureStage.initModality(Modality.WINDOW_MODAL);
+        addPictureStage.initOwner(characterTable.getScene().getWindow());
+        Parent root;
+        try {
+            root = FXMLLoader.load(getClass().getResource("/fxml/AddPictureView.fxml"));
+            addPictureStage.setScene(new Scene(root));
+            addPictureStage.setTitle("Add Picture");
+            addPictureStage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
+     * Handles the action for the menu option to delete a picture in the
+     * database.
+     *
+     * @param event the action event
+     */
+    @FXML
+    public void handleDeletePicture(ActionEvent event) {
+        Stage deletePictureStage = new Stage();
+        deletePictureStage.initModality(Modality.WINDOW_MODAL);
+        deletePictureStage.initOwner(characterTable.getScene().getWindow());
+        Parent root;
+        try {
+            root = FXMLLoader.load(getClass().getResource("/fxml/DeletePictureView.fxml"));
+            deletePictureStage.setScene(new Scene(root));
+            deletePictureStage.setTitle("Delete Picture");
+            deletePictureStage.show();
+        } catch (IOException ex) {
+            Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    /**
      * This method handles the close menu option by exiting the program.
      *
      * @param event the action event

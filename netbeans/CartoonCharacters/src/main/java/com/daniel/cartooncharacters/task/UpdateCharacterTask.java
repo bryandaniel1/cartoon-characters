@@ -20,6 +20,7 @@ import com.daniel.cartooncharacters.data.CharacterDemographicDataAccess;
 import com.daniel.cartooncharacters.data.SimpleCharacterDataAccess;
 import com.daniel.cartooncharacters.data.SimpleCharacterDemographicDataAccess;
 import com.daniel.cartooncharacters.entity.CartoonCharacter;
+import com.daniel.cartooncharacters.entity.CartoonLocation;
 import com.daniel.cartooncharacters.entity.CharacterDemographic;
 import com.daniel.cartooncharacters.util.MessageStage;
 import javafx.concurrent.Task;
@@ -37,6 +38,11 @@ public class UpdateCharacterTask extends Task<Void> {
      * The cartoon character to add
      */
     private final CartoonCharacter character;
+
+    /**
+     * The location for the character
+     */
+    private final CartoonLocation cartoonLocation;
 
     /**
      * The demographic data for the character
@@ -58,7 +64,7 @@ public class UpdateCharacterTask extends Task<Void> {
      * The indicator of success or failure
      */
     private boolean successful;
-    
+
     /**
      * The message to display
      */
@@ -69,10 +75,13 @@ public class UpdateCharacterTask extends Task<Void> {
      *
      *
      * @param character the character to update
+     * @param cartoonLocation the location for the character
      * @param characterDemographic the demographic information to update
      */
-    public UpdateCharacterTask(CartoonCharacter character, CharacterDemographic characterDemographic) {
+    public UpdateCharacterTask(CartoonCharacter character, CartoonLocation cartoonLocation,
+            CharacterDemographic characterDemographic) {
         this.character = character;
+        this.cartoonLocation = cartoonLocation;
         this.characterDemographic = characterDemographic;
         characterDataAccess = new SimpleCharacterDataAccess();
         demographicDataAccess = new SimpleCharacterDemographicDataAccess();
@@ -80,7 +89,8 @@ public class UpdateCharacterTask extends Task<Void> {
 
     @Override
     protected Void call() throws Exception {
-        CartoonCharacter cartoonToUpdate = characterDataAccess.findCartoonCharacter(character.getCharacterName());
+        CartoonCharacter cartoonToUpdate = characterDataAccess.findCartoonCharacter(character.getCharacterName(),
+                cartoonLocation);
         if (cartoonToUpdate != null) {
             cartoonToUpdate.setCharacterHome(character.getCharacterHome());
             cartoonToUpdate.setCharacterName(character.getCharacterName());

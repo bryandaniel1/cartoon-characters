@@ -18,6 +18,7 @@ package com.daniel.cartooncharacters.controller;
 import com.daniel.cartooncharacters.data.SimpleCartoonDataAccess;
 import com.daniel.cartooncharacters.data.SimpleGenderDataAccess;
 import com.daniel.cartooncharacters.data.SimpleLocationDataAccess;
+import com.daniel.cartooncharacters.entity.Cartoon;
 import com.daniel.cartooncharacters.entity.CartoonCharacter;
 import com.daniel.cartooncharacters.entity.CartoonLocation;
 import com.daniel.cartooncharacters.entity.CharacterDemographic;
@@ -26,6 +27,8 @@ import com.daniel.cartooncharacters.task.SaveCharacterTask;
 import com.daniel.cartooncharacters.task.SelectCartoonTask;
 import com.daniel.cartooncharacters.validation.InputValidator;
 import java.util.List;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -91,6 +94,16 @@ public class AddCharacterController {
     private CartoonCharacter cartoonCharacter;
 
     /**
+     * The property for the cartoon
+     */
+    private ObjectProperty<Cartoon> cartoon;
+
+    /**
+     * The property for the location
+     */
+    private ObjectProperty<CartoonLocation> cartoonLocation;
+
+    /**
      * The new cartoon character demographic data
      */
     private CharacterDemographic characterDemographic;
@@ -108,6 +121,8 @@ public class AddCharacterController {
     public void initialize() {
         validator = new InputValidator();
         cartoonCharacter = new CartoonCharacter();
+        cartoon = new SimpleObjectProperty();
+        cartoonLocation = new SimpleObjectProperty();
         characterDemographic = new CharacterDemographic();
         characterDemographic.setCharacter(cartoonCharacter);
         locationNameComboBox.getItems().clear();
@@ -162,7 +177,8 @@ public class AddCharacterController {
             cartoonCharacter.setDescription(characterDescriptionTextArea.getText());
             setGender(genderChoiceBox.getSelectionModel().getSelectedItem());
             setVillain(goodOrEvilChoiceBox.getSelectionModel().getSelectedItem());
-            SaveCharacterTask task = new SaveCharacterTask(cartoonCharacter, characterDemographic);
+            SaveCharacterTask task = new SaveCharacterTask(cartoonCharacter, cartoonLocation.get(), 
+                    characterDemographic);
             Thread thread = new Thread(task);
             thread.start();
             initialize();
@@ -181,8 +197,8 @@ public class AddCharacterController {
 
                     @Override
                     protected Void call() throws Exception {
-                        CartoonLocation cartoonLocation = new SimpleLocationDataAccess().findCartoonLocation(newValue);
-                        cartoonCharacter.setCharacterHome(cartoonLocation);
+                        cartoonLocation.set(new SimpleLocationDataAccess().findCartoonLocation(newValue, cartoon.get()));
+                        cartoonCharacter.setCharacterHome(cartoonLocation.get());
                         return null;
                     }
 
@@ -209,6 +225,7 @@ public class AddCharacterController {
         cartoonNameComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null && !newValue.isEmpty()) {
                 SelectCartoonTask task = new SelectCartoonTask(newValue, locationNameComboBox);
+                cartoon.bind(task.valueProperty());
                 Thread thread = new Thread(task);
                 thread.start();
                 locationNameComboBox.setDisable(false);

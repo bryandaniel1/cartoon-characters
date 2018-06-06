@@ -18,7 +18,9 @@ package com.daniel.cartooncharacters.controller;
 import com.daniel.cartooncharacters.data.SimpleCartoonDataAccess;
 import com.daniel.cartooncharacters.data.SimpleCharacterDemographicDataAccess;
 import com.daniel.cartooncharacters.data.SimpleGenderDataAccess;
+import com.daniel.cartooncharacters.entity.Cartoon;
 import com.daniel.cartooncharacters.entity.CartoonCharacter;
+import com.daniel.cartooncharacters.entity.CartoonLocation;
 import com.daniel.cartooncharacters.entity.CharacterDemographic;
 import com.daniel.cartooncharacters.entity.Gender;
 import com.daniel.cartooncharacters.task.SelectCartoonTask;
@@ -92,6 +94,16 @@ public class UpdateCharacterController {
     private SimpleObjectProperty<CartoonCharacter> cartoonCharacter;
 
     /**
+     * The property for the location
+     */
+    private SimpleObjectProperty<CartoonLocation> cartoonLocation;
+
+    /**
+     * The property for the cartoon
+     */
+    private SimpleObjectProperty<Cartoon> cartoon;
+
+    /**
      * The new cartoon character demographic data
      */
     private SimpleObjectProperty<CharacterDemographic> characterDemographic;
@@ -109,6 +121,8 @@ public class UpdateCharacterController {
     public void initialize() {
         validator = new InputValidator();
         cartoonCharacter = new SimpleObjectProperty<>();
+        cartoonLocation = new SimpleObjectProperty<>();
+        cartoon = new SimpleObjectProperty<>();
         characterDemographic = new SimpleObjectProperty<>();
         locationNameComboBox.getItems().clear();
         locationNameComboBox.setDisable(true);
@@ -160,7 +174,8 @@ public class UpdateCharacterController {
             cartoonCharacter.get().setDescription(characterDescriptionTextArea.getText());
             setGender(genderChoiceBox.getSelectionModel().getSelectedItem());
             setVillain(goodOrEvilChoiceBox.getSelectionModel().getSelectedItem());
-            UpdateCharacterTask task = new UpdateCharacterTask(cartoonCharacter.get(), characterDemographic.get());
+            UpdateCharacterTask task = new UpdateCharacterTask(cartoonCharacter.get(), cartoonLocation.get(), 
+                    characterDemographic.get());
             Thread thread = new Thread(task);
             thread.start();
             initialize();
@@ -175,7 +190,7 @@ public class UpdateCharacterController {
     private void createListeners() {
         characterNameComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null && !newValue.isEmpty()) {
-                SelectCharacterTask task = new SelectCharacterTask(newValue);
+                SelectCharacterTask task = new SelectCharacterTask(newValue, cartoonLocation.get());
                 cartoonCharacter.bind(task.valueProperty());
                 Thread thread = new Thread(task);
                 thread.start();
@@ -215,7 +230,8 @@ public class UpdateCharacterController {
         });
         locationNameComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null && !newValue.isEmpty()) {
-                SelectLocationTask task = new SelectLocationTask(newValue, characterNameComboBox);
+                SelectLocationTask task = new SelectLocationTask(newValue, characterNameComboBox, cartoon.get());
+                cartoonLocation.bind(task.valueProperty());
                 Thread thread = new Thread(task);
                 thread.start();
                 characterNameComboBox.setDisable(false);
@@ -234,6 +250,7 @@ public class UpdateCharacterController {
         cartoonNameComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null && !newValue.isEmpty()) {
                 SelectCartoonTask task = new SelectCartoonTask(newValue, locationNameComboBox);
+                cartoon.bind(task.valueProperty());
                 Thread thread = new Thread(task);
                 thread.start();
                 locationNameComboBox.setDisable(false);

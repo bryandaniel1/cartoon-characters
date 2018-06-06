@@ -19,6 +19,7 @@ import com.daniel.cartooncharacters.data.CartoonDataAccess;
 import com.daniel.cartooncharacters.data.LocationDataAccess;
 import com.daniel.cartooncharacters.data.SimpleCartoonDataAccess;
 import com.daniel.cartooncharacters.data.SimpleLocationDataAccess;
+import com.daniel.cartooncharacters.entity.Cartoon;
 import com.daniel.cartooncharacters.entity.CartoonLocation;
 import com.daniel.cartooncharacters.util.MessageStage;
 import javafx.concurrent.Task;
@@ -79,9 +80,10 @@ public class UpdateLocationTask extends Task<Void> {
 
     @Override
     protected Void call() throws Exception {
-        CartoonLocation cartoonLocation = locationDataAccess.findCartoonLocation(locationName);
+        Cartoon cartoon = cartoonDataAccess.findCartoon(cartoonName);
+        CartoonLocation cartoonLocation = locationDataAccess.findCartoonLocation(locationName, cartoon);
         if (cartoonLocation != null) {
-            cartoonLocation.setCartoon(cartoonDataAccess.findCartoon(cartoonName));
+            cartoonLocation.setCartoon(cartoon);
             cartoonLocation.setLocationName(locationName);
             cartoonLocation.setDescription(locationDescription);
             successful = locationDataAccess.updateLocation(cartoonLocation);

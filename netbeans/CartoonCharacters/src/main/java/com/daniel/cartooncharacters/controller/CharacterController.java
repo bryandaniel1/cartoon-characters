@@ -19,8 +19,10 @@ import com.daniel.cartooncharacters.util.ScreenChangeManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import com.daniel.cartooncharacters.entity.CartoonCharacter;
-import com.daniel.cartooncharacters.entity.CartoonPicture;
+import com.daniel.cartooncharacters.entity.CharacterPicture;
 import com.daniel.cartooncharacters.task.SearchPictureTask;
+import com.daniel.cartooncharacters.util.FileUtil;
+import java.io.File;
 import java.util.List;
 import javafx.beans.property.SimpleListProperty;
 import javafx.event.ActionEvent;
@@ -142,7 +144,7 @@ public class CharacterController {
         pictureList.bind(task.valueProperty());
         pictureList.addListener((observable, oldValue, newValue) -> {
             currentPictureIndex = 0;
-            pictureLocationTextArea.setText(((List<CartoonPicture>) newValue).get(currentPictureIndex)
+            pictureLocationTextArea.setText(((List<CharacterPicture>) newValue).get(currentPictureIndex)
                     .getPictureLocation());
             if (pictureList.size() > 1) {
                 rightArrowButton.setDisable(false);
@@ -150,7 +152,7 @@ public class CharacterController {
             }
         });
         pictureLocationTextArea.textProperty().addListener((observable, oldValue, newValue) -> {
-            characterImage.setImage(new Image(HomeController.class.getResourceAsStream(newValue)));
+            characterImage.setImage(new Image(FileUtil.getImageFile(newValue).toURI().toString()));
         });
         characterHomeHyperlink.setText(character.getCharacterHome().getLocationName());
         characterHomeHyperlink.setOnAction((event) -> this.handleHomeSelect(event));
@@ -206,7 +208,7 @@ public class CharacterController {
      */
     @FXML
     void handleLeftArrowClick(ActionEvent event) {
-        pictureLocationTextArea.setText(((CartoonPicture) pictureList.get(--currentPictureIndex))
+        pictureLocationTextArea.setText(((CharacterPicture) pictureList.get(--currentPictureIndex))
                 .getPictureLocation());
         rightArrowButton.setDisable(false);
         rightArrowButton.setVisible(true);
@@ -223,7 +225,7 @@ public class CharacterController {
      */
     @FXML
     void handleRightArrowClick(ActionEvent event) {
-        pictureLocationTextArea.setText(((CartoonPicture) pictureList.get(++currentPictureIndex))
+        pictureLocationTextArea.setText(((CharacterPicture) pictureList.get(++currentPictureIndex))
                 .getPictureLocation());
         leftArrowButton.setDisable(false);
         leftArrowButton.setVisible(true);

@@ -39,9 +39,9 @@ public class SimpleCharacterDemographicDataAccess implements CharacterDemographi
         Session session = null;
         try {
             session = DatabaseUtil.getNewSession();
-            Criteria crit = session.createCriteria(CharacterDemographic.class);
-            crit.add(Restrictions.eq("character.characterId", cartoonCharacter.getCharacterId()));
-            characterDemographic = (CharacterDemographic) crit.uniqueResult();
+            Criteria criteria = session.createCriteria(CharacterDemographic.class);
+            criteria.add(Restrictions.eq("character.characterId", cartoonCharacter.getCharacterId()));
+            characterDemographic = (CharacterDemographic) criteria.uniqueResult();
         } catch (HibernateException he) {
             Logger.getLogger(SimpleCharacterDemographicDataAccess.class.getName()).log(Level.INFO,
                     "HibernateException exception occurred during SimpleCharacterDemographicDataAccess.getCharacterDemographic.", he);
