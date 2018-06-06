@@ -89,7 +89,7 @@ public class FileUtil {
     }
 
     /**
-     * Returns a new image file path to store as a the database record.
+     * Returns a new image file path to store as a database record.
      *
      * @param cartoonTitle the cartoon title
      * @param imageName the image name
