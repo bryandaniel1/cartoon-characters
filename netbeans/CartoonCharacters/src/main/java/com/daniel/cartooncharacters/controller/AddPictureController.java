@@ -191,7 +191,6 @@ public class AddPictureController {
      */
     @FXML
     void handleSaveAction(ActionEvent event) {
-        System.out.println("fired!");
         SavePictureTask task = new SavePictureTask(imageFile, pictureTypeChoiceBox.getSelectionModel().selectedItemProperty().get(), 
                 cartoon.get(), cartoonLocation.get(), cartoonCharacter.get());
         Thread thread = new Thread(task);
