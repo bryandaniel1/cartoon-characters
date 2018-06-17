@@ -15,7 +15,6 @@
  */
 package com.daniel.cartooncharacters.util;
 
-import static com.daniel.cartooncharacters.task.SavePictureTask.BUFFER_LENGTH;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -31,6 +30,11 @@ import java.util.logging.Logger;
  * @author Bryan Daniel
  */
 public class FileUtil {
+
+    /**
+     * The length of the buffer used for file copying
+     */
+    public static final int BUFFER_LENGTH = 8192;
 
     /**
      * The name of the images directory
@@ -84,7 +88,7 @@ public class FileUtil {
      * @return the new image file
      */
     public static File getNewImageFile(String cartoonTitle, String imageName) {
-        return new File(new File(System.getProperty("user.dir")), IMAGES_DIRECTORY 
+        return new File(new File(System.getProperty("user.dir")), IMAGES_DIRECTORY
                 + File.separator + cartoonTitle + File.separator + imageName);
     }
 
@@ -120,5 +124,15 @@ public class FileUtil {
                     "An exception occurred while copying the image.", ex);
             throw new IOException("An exception occurred while copying the image.");
         }
+    }
+
+    /**
+     * Deletes the specified file.
+     *
+     * @param imageToDelete the image to delete
+     * @return true if successful, false otherwise
+     */
+    public static boolean deleteImage(File imageToDelete) {
+        return imageToDelete.delete();
     }
 }

@@ -47,6 +47,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * This controller supports the view for adding a new picture to the cartoon
@@ -174,12 +175,12 @@ public class AddPictureController {
     }
 
     /**
-     * Handles the action for the cancel button.
+     * Handles the action for the close button.
      *
      * @param event the action event
      */
     @FXML
-    public void handleCancelAction(ActionEvent event) {
+    public void handleCloseAction(ActionEvent event) {
         Stage stage = (Stage) ((Node) event.getTarget()).getScene().getWindow();
         stage.close();
     }
@@ -191,7 +192,6 @@ public class AddPictureController {
      */
     @FXML
     void handleSaveAction(ActionEvent event) {
-        System.out.println("fired!");
         SavePictureTask task = new SavePictureTask(imageFile, pictureTypeChoiceBox.getSelectionModel().selectedItemProperty().get(), 
                 cartoon.get(), cartoonLocation.get(), cartoonCharacter.get());
         Thread thread = new Thread(task);
@@ -251,7 +251,7 @@ public class AddPictureController {
             }
         });
         cartoonNameComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null && !newValue.isEmpty()) {
+            if (!StringUtils.isBlank(newValue)) {
                 SelectCartoonTask task = new SelectCartoonTask(newValue, locationNameComboBox);
                 cartoon.bind(task.valueProperty());
                 Thread thread = new Thread(task);
@@ -272,7 +272,7 @@ public class AddPictureController {
             }
         });
         locationNameComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null && !newValue.isEmpty()) {
+            if (!StringUtils.isBlank(newValue)) {
                 SelectLocationTask task = new SelectLocationTask(newValue, characterNameComboBox, cartoon.get());
                 cartoonLocation.bind(task.valueProperty());
                 Thread thread = new Thread(task);
@@ -291,7 +291,7 @@ public class AddPictureController {
             }
         });
         characterNameComboBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null && !newValue.isEmpty()) {
+            if (!StringUtils.isBlank(newValue)) {
                 SelectCharacterTask task = new SelectCharacterTask(newValue, cartoonLocation.get());
                 cartoonCharacter.bind(task.valueProperty());
                 Thread thread = new Thread(task);

@@ -22,7 +22,6 @@ import com.daniel.cartooncharacters.entity.CartoonCharacter;
 import com.daniel.cartooncharacters.entity.CharacterPicture;
 import com.daniel.cartooncharacters.task.SearchPictureTask;
 import com.daniel.cartooncharacters.util.FileUtil;
-import java.io.File;
 import java.util.List;
 import javafx.beans.property.SimpleListProperty;
 import javafx.event.ActionEvent;

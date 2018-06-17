@@ -59,7 +59,7 @@
                   <Insets right="30.0" top="40.0" />
                </GridPane.margin>
             </TextArea>
-            <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#handleCancelAction" text="Cancel" GridPane.rowIndex="4" />
+            <Button fx:id="closeButton" mnemonicParsing="false" onAction="#handleCloseAction" text="Close" GridPane.rowIndex="4" />
             <Button fx:id="saveButton" mnemonicParsing="false" onAction="#handleSaveAction" text="Save" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <ComboBox fx:id="cartoonNameComboBox" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Label text="Location Name:" GridPane.rowIndex="2" />

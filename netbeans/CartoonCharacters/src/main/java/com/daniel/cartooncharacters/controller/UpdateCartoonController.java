@@ -77,12 +77,12 @@ public class UpdateCartoonController {
     }
 
     /**
-     * Handles the action for the cancel button by closing the update window.
+     * Handles the action for the close button by closing the update window.
      *
      * @param event the action event
      */
     @FXML
-    void handleCancelAction(ActionEvent event) {
+    void handleCloseAction(ActionEvent event) {
         Stage stage = (Stage) ((Node) event.getTarget()).getScene().getWindow();
         stage.close();
     }

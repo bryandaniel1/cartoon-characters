@@ -16,7 +16,6 @@
 package com.daniel.cartooncharacters.data;
 
 import com.daniel.cartooncharacters.entity.CartoonLocation;
-import com.daniel.cartooncharacters.entity.CartoonPicture;
 import com.daniel.cartooncharacters.entity.LocationPicture;
 import com.daniel.cartooncharacters.util.DatabaseUtil;
 import java.util.ArrayList;
@@ -112,11 +111,43 @@ public class LocationPictureDataAccess {
             session.getTransaction().commit();
             return true;
         } catch (HibernateException he) {
-            Logger.getLogger(CartoonPictureDataAccess.class.getName()).log(Level.INFO,
+            Logger.getLogger(LocationPictureDataAccess.class.getName()).log(Level.INFO,
                     "HibernateException exception occurred during LocationPictureDataAccess.savePicture.", he);
         } catch (Exception e) {
-            Logger.getLogger(CartoonPictureDataAccess.class.getName()).log(Level.INFO,
+            Logger.getLogger(LocationPictureDataAccess.class.getName()).log(Level.INFO,
                     "Exception occurred during LocationPictureDataAccess.savePicture.", e);
+        } finally {
+            DatabaseUtil.close(session);
+        }
+        return false;
+    }
+
+    /**
+     * This method deletes all records of the specified location picture from
+     * the location picture table.
+     *
+     * @param pictureLocation the path of the location picture
+     * @return true if successful, false otherwise
+     */
+    public boolean deletePicture(String pictureLocation) {
+        Session session = null;
+        try {
+            session = DatabaseUtil.getNewSession();
+            session.getTransaction().begin();
+            Criteria criteria = session.createCriteria(LocationPicture.class);
+            criteria.add(Restrictions.eq("pictureLocation", pictureLocation));
+            List<LocationPicture> picturesToDelete = (List<LocationPicture>) criteria.list();
+            for (LocationPicture pictureToDelete : picturesToDelete) {
+                session.delete((LocationPicture) pictureToDelete);
+            }
+            session.getTransaction().commit();
+            return true;
+        } catch (HibernateException he) {
+            Logger.getLogger(LocationPictureDataAccess.class.getName()).log(Level.INFO,
+                    "HibernateException exception occurred during LocationPictureDataAccess.deletePicture.", he);
+        } catch (Exception e) {
+            Logger.getLogger(LocationPictureDataAccess.class.getName()).log(Level.INFO,
+                    "Exception occurred during LocationPictureDataAccess.deletePicture.", e);
         } finally {
             DatabaseUtil.close(session);
         }

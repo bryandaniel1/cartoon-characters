@@ -63,11 +63,6 @@ public class SavePictureTask extends Task<Void> {
     }
 
     /**
-     * The length of the buffer used for file copying
-     */
-    public static final int BUFFER_LENGTH = 8192;
-
-    /**
      * The image file
      */
     private final File imageFile;

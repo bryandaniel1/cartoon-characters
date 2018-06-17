@@ -112,11 +112,43 @@ public class CharacterPictureDataAccess {
             session.getTransaction().commit();
             return true;
         } catch (HibernateException he) {
-            Logger.getLogger(CartoonPictureDataAccess.class.getName()).log(Level.INFO,
+            Logger.getLogger(CharacterPictureDataAccess.class.getName()).log(Level.INFO,
                     "HibernateException exception occurred during CharacterPictureDataAccess.savePicture.", he);
         } catch (Exception e) {
-            Logger.getLogger(CartoonPictureDataAccess.class.getName()).log(Level.INFO,
+            Logger.getLogger(CharacterPictureDataAccess.class.getName()).log(Level.INFO,
                     "Exception occurred during CharacterPictureDataAccess.savePicture.", e);
+        } finally {
+            DatabaseUtil.close(session);
+        }
+        return false;
+    }
+
+    /**
+     * This method deletes all records of the specified character picture from
+     * the character picture table.
+     *
+     * @param pictureLocation the path of the location picture
+     * @return true if successful, false otherwise
+     */
+    public boolean deletePicture(String pictureLocation) {
+        Session session = null;
+        try {
+            session = DatabaseUtil.getNewSession();
+            session.getTransaction().begin();
+            Criteria criteria = session.createCriteria(CharacterPicture.class);
+            criteria.add(Restrictions.eq("pictureLocation", pictureLocation));
+            List<CharacterPicture> picturesToDelete = (List<CharacterPicture>) criteria.list();
+            for (CharacterPicture pictureToDelete : picturesToDelete) {
+                session.delete((CharacterPicture) pictureToDelete);
+            }
+            session.getTransaction().commit();
+            return true;
+        } catch (HibernateException he) {
+            Logger.getLogger(CharacterPictureDataAccess.class.getName()).log(Level.INFO,
+                    "HibernateException exception occurred during CharacterPictureDataAccess.deletePicture.", he);
+        } catch (Exception e) {
+            Logger.getLogger(CharacterPictureDataAccess.class.getName()).log(Level.INFO,
+                    "Exception occurred during CharacterPictureDataAccess.deletePicture.", e);
         } finally {
             DatabaseUtil.close(session);
         }

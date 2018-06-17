@@ -15,11 +15,11 @@
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="700.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.daniel.cartooncharacters.controller.AddPictureController">
+<AnchorPane id="AnchorPane" prefHeight="550.0" prefWidth="750.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.daniel.cartooncharacters.controller.DeletePictureController">
     <stylesheets>
         <URL value="@/styles/main.css" />
     </stylesheets>
-   <children>
+    <children>
       <GridPane hgap="10.0" styleClass="gridPane" stylesheets="@../styles/main.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
           <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" percentWidth="25.0" />
@@ -38,7 +38,7 @@
          <children>
             <StackPane style="-fx-background-color: linear-gradient(to bottom, grey, white, grey);" stylesheets="@../styles/main.css" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER">
                <children>
-                  <Label alignment="CENTER" contentDisplay="CENTER" style="-fx-background-color: rgba(0, 0, 0, 0);" text="Add Picture" textAlignment="CENTER">
+                  <Label alignment="CENTER" contentDisplay="CENTER" style="-fx-background-color: rgba(0, 0, 0, 0);" text="Delete Picture" textAlignment="CENTER">
                      <font>
                         <Font name="DejaVu Sans Bold" size="39.0" />
                      </font>
@@ -56,7 +56,7 @@
             </StackPane>
             <Label fx:id="chooseCartoonLabel" text="Choose Cartoon:" GridPane.rowIndex="2" />
             <Button fx:id="closeButton" mnemonicParsing="false" onAction="#handleCloseAction" text="Close" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-            <Button fx:id="savePictureButton" mnemonicParsing="false" onAction="#handleSaveAction" text="Save Picture" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+            <Button fx:id="deletePictureButton" mnemonicParsing="false" onAction="#handleDeleteAction" text="Delete Picture" GridPane.columnIndex="2" GridPane.rowIndex="6" />
             <ComboBox fx:id="cartoonNameComboBox" GridPane.columnIndex="1" GridPane.rowIndex="2" />
             <Label fx:id="chooseLocationLabel" text="Choose Location:" GridPane.rowIndex="3" />
             <ComboBox fx:id="locationNameComboBox" GridPane.columnIndex="1" GridPane.rowIndex="3" />
@@ -64,8 +64,9 @@
             <ComboBox fx:id="characterNameComboBox" GridPane.columnIndex="1" GridPane.rowIndex="4" />
             <Label text="Picture Type:" GridPane.rowIndex="1" />
             <ChoiceBox fx:id="pictureTypeChoiceBox" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Button fx:id="selectPictureButton" mnemonicParsing="false" text="Select a Picture..." GridPane.columnIndex="1" GridPane.rowIndex="5" />
             <ImageView fx:id="imagePreview" fitHeight="300.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2" GridPane.rowIndex="1" GridPane.rowSpan="2147483647" />
+            <Label fx:id="choosePictureLabel" text="Choose Picture:" GridPane.rowIndex="5" />
+            <ComboBox fx:id="selectPictureComboBox" GridPane.columnIndex="1" GridPane.rowIndex="5" />
          </children>
       </GridPane>
    </children>

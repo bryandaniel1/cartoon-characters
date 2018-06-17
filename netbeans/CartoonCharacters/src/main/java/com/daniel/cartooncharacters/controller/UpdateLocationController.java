@@ -88,12 +88,12 @@ public class UpdateLocationController {
     }
 
     /**
-     * Handles the action for the cancel button.
+     * Handles the action for the close button.
      *
      * @param event the action event
      */
     @FXML
-    public void handleCancelAction(ActionEvent event) {
+    public void handleCloseAction(ActionEvent event) {
         Stage stage = (Stage) ((Node) event.getTarget()).getScene().getWindow();
         stage.close();
     }
