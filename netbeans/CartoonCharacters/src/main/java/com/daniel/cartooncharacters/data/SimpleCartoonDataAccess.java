@@ -16,7 +16,7 @@
 package com.daniel.cartooncharacters.data;
 
 import com.daniel.cartooncharacters.entity.Cartoon;
-import com.daniel.cartooncharacters.util.DatabaseUtil;
+import com.daniel.cartooncharacters.util.SessionUtil;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,7 +41,7 @@ public class SimpleCartoonDataAccess implements CartoonDataAccess {
         List<String> cartoons = null;
         Session session = null;
         try {
-            session = DatabaseUtil.getNewSession();
+            session = SessionUtil.getNewSession();
             cartoons = session.createCriteria(Cartoon.class)
                     .setProjection(Projections.property("title")).list();
         } catch (HibernateException he) {
@@ -51,7 +51,7 @@ public class SimpleCartoonDataAccess implements CartoonDataAccess {
             Logger.getLogger(SimpleCartoonDataAccess.class.getName()).log(Level.INFO,
                     "Exception occurred during SimpleCartoonDataAccess.findAllCartoons.", e);
         } finally {
-            DatabaseUtil.close(session);
+            SessionUtil.close(session);
         }
         return cartoons;
     }
@@ -62,7 +62,7 @@ public class SimpleCartoonDataAccess implements CartoonDataAccess {
         Cartoon cartoon = null;
         Session session = null;
         try {
-            session = DatabaseUtil.getNewSession();
+            session = SessionUtil.getNewSession();
             Criteria criteria = session.createCriteria(Cartoon.class);
             criteria.add(Restrictions.eq("title", cartoonName));
             cartoon = (Cartoon) criteria.uniqueResult();
@@ -73,7 +73,7 @@ public class SimpleCartoonDataAccess implements CartoonDataAccess {
             Logger.getLogger(SimpleCartoonDataAccess.class.getName()).log(Level.INFO,
                     "Exception occurred during SimpleCartoonDataAccess.findCartoon.", e);
         } finally {
-            DatabaseUtil.close(session);
+            SessionUtil.close(session);
         }
         return cartoon;
     }
@@ -82,7 +82,7 @@ public class SimpleCartoonDataAccess implements CartoonDataAccess {
     public boolean addCartoon(Cartoon cartoon) {
         Session session = null;
         try {
-            session = DatabaseUtil.getNewSession();
+            session = SessionUtil.getNewSession();
             session.getTransaction().begin();
             session.persist(cartoon);
             session.getTransaction().commit();
@@ -95,7 +95,7 @@ public class SimpleCartoonDataAccess implements CartoonDataAccess {
                     "Exception occurred during SimpleCartoonDataAccess.addCartoon.", e);
             return false;
         } finally {
-            DatabaseUtil.close(session);
+            SessionUtil.close(session);
         }
         return true;
     }
@@ -104,7 +104,7 @@ public class SimpleCartoonDataAccess implements CartoonDataAccess {
     public boolean updateCartoon(Cartoon cartoon) {
         Session session = null;
         try {
-            session = DatabaseUtil.getNewSession();
+            session = SessionUtil.getNewSession();
             session.getTransaction().begin();
             session.merge(cartoon);
             session.getTransaction().commit();
@@ -117,7 +117,7 @@ public class SimpleCartoonDataAccess implements CartoonDataAccess {
                     "Exception occurred during SimpleCartoonDataAccess.updateCartoon.", e);
             return false;
         } finally {
-            DatabaseUtil.close(session);
+            SessionUtil.close(session);
         }
         return true;
     }

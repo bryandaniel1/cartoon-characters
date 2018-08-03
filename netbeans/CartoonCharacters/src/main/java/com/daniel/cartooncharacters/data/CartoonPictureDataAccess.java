@@ -17,7 +17,7 @@ package com.daniel.cartooncharacters.data;
 
 import com.daniel.cartooncharacters.entity.Cartoon;
 import com.daniel.cartooncharacters.entity.CartoonPicture;
-import com.daniel.cartooncharacters.util.DatabaseUtil;
+import com.daniel.cartooncharacters.util.SessionUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -47,7 +47,7 @@ public class CartoonPictureDataAccess {
         ArrayList<CartoonPicture> pictures = new ArrayList<>();
         Session session = null;
         try {
-            session = DatabaseUtil.getNewSession();
+            session = SessionUtil.getNewSession();
             Criteria criteria = session.createCriteria(CartoonPicture.class);
             criteria.add(Restrictions.eq("cartoon.cartoonId", entityIdentifier));
             List list = criteria.list();
@@ -62,7 +62,7 @@ public class CartoonPictureDataAccess {
             Logger.getLogger(CartoonPictureDataAccess.class.getName()).log(Level.INFO,
                     "Exception occurred during CartoonPictureDataAccess.findPictures.", e);
         } finally {
-            DatabaseUtil.close(session);
+            SessionUtil.close(session);
         }
         return pictures;
     }
@@ -79,7 +79,7 @@ public class CartoonPictureDataAccess {
         CartoonPicture cartoonPictureFound = null;
         Session session = null;
         try {
-            session = DatabaseUtil.getNewSession();
+            session = SessionUtil.getNewSession();
             Criteria criteria = session.createCriteria(CartoonPicture.class);
             criteria.add(Restrictions.eq("pictureLocation", newImagePath));
             criteria.add(Restrictions.eq("cartoon", cartoon));
@@ -91,7 +91,7 @@ public class CartoonPictureDataAccess {
             Logger.getLogger(CartoonPictureDataAccess.class.getName()).log(Level.INFO,
                     "Exception occurred during CartoonPictureDataAccess.findCartoonPicture.", e);
         } finally {
-            DatabaseUtil.close(session);
+            SessionUtil.close(session);
         }
         return cartoonPictureFound;
     }
@@ -105,7 +105,7 @@ public class CartoonPictureDataAccess {
     public boolean savePicture(CartoonPicture picture) {
         Session session = null;
         try {
-            session = DatabaseUtil.getNewSession();
+            session = SessionUtil.getNewSession();
             session.getTransaction().begin();
             session.persist((CartoonPicture) picture);
             session.getTransaction().commit();
@@ -117,7 +117,7 @@ public class CartoonPictureDataAccess {
             Logger.getLogger(CartoonPictureDataAccess.class.getName()).log(Level.INFO,
                     "Exception occurred during CartoonPictureDataAccess.savePicture.", e);
         } finally {
-            DatabaseUtil.close(session);
+            SessionUtil.close(session);
         }
         return false;
     }
@@ -132,7 +132,7 @@ public class CartoonPictureDataAccess {
     public boolean deletePicture(String pictureLocation) {
         Session session = null;
         try {
-            session = DatabaseUtil.getNewSession();
+            session = SessionUtil.getNewSession();
             session.getTransaction().begin();
             Criteria criteria = session.createCriteria(CartoonPicture.class);
             criteria.add(Restrictions.eq("pictureLocation", pictureLocation));
@@ -149,7 +149,7 @@ public class CartoonPictureDataAccess {
             Logger.getLogger(CartoonPictureDataAccess.class.getName()).log(Level.INFO,
                     "Exception occurred during CartoonPictureDataAccess.deletePicture.", e);
         } finally {
-            DatabaseUtil.close(session);
+            SessionUtil.close(session);
         }
         return false;
     }

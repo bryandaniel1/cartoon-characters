@@ -17,7 +17,7 @@ package com.daniel.cartooncharacters.data;
 
 import com.daniel.cartooncharacters.entity.CartoonCharacter;
 import com.daniel.cartooncharacters.entity.CharacterDemographic;
-import com.daniel.cartooncharacters.util.DatabaseUtil;
+import com.daniel.cartooncharacters.util.SessionUtil;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.hibernate.Criteria;
@@ -38,7 +38,7 @@ public class SimpleCharacterDemographicDataAccess implements CharacterDemographi
         CharacterDemographic characterDemographic = null;
         Session session = null;
         try {
-            session = DatabaseUtil.getNewSession();
+            session = SessionUtil.getNewSession();
             Criteria criteria = session.createCriteria(CharacterDemographic.class);
             criteria.add(Restrictions.eq("character.characterId", cartoonCharacter.getCharacterId()));
             characterDemographic = (CharacterDemographic) criteria.uniqueResult();
@@ -49,7 +49,7 @@ public class SimpleCharacterDemographicDataAccess implements CharacterDemographi
             Logger.getLogger(SimpleCharacterDemographicDataAccess.class.getName()).log(Level.INFO,
                     "Exception occurred during SimpleCharacterDemographicDataAccess.getCharacterDemographic.", e);
         } finally {
-            DatabaseUtil.close(session);
+            SessionUtil.close(session);
         }
         return characterDemographic;
     }    

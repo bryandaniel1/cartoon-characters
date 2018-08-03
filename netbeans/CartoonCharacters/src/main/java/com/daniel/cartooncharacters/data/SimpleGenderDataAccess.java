@@ -16,7 +16,7 @@
 package com.daniel.cartooncharacters.data;
 
 import com.daniel.cartooncharacters.entity.Gender;
-import com.daniel.cartooncharacters.util.DatabaseUtil;
+import com.daniel.cartooncharacters.util.SessionUtil;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,7 +36,7 @@ public class SimpleGenderDataAccess implements GenderDataAccess {
         List<Gender> cartoons = null;
         Session session = null;
         try {
-            session = DatabaseUtil.getNewSession();
+            session = SessionUtil.getNewSession();
             cartoons = session.createCriteria(Gender.class).list();
         } catch (HibernateException he) {
             Logger.getLogger(SimpleGenderDataAccess.class.getName()).log(Level.INFO,
@@ -45,7 +45,7 @@ public class SimpleGenderDataAccess implements GenderDataAccess {
             Logger.getLogger(SimpleGenderDataAccess.class.getName()).log(Level.INFO,
                     "Exception occurred during SimpleGenderDataAccess.findAllGenders.", e);
         } finally {
-            DatabaseUtil.close(session);
+            SessionUtil.close(session);
         }
         return cartoons;
     }
