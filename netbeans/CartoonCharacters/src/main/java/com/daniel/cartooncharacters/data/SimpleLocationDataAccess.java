@@ -17,7 +17,7 @@ package com.daniel.cartooncharacters.data;
 
 import com.daniel.cartooncharacters.entity.Cartoon;
 import com.daniel.cartooncharacters.entity.CartoonLocation;
-import com.daniel.cartooncharacters.util.DatabaseUtil;
+import com.daniel.cartooncharacters.util.SessionUtil;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,7 +41,7 @@ public class SimpleLocationDataAccess implements LocationDataAccess {
         List<String> cartoonLocations = null;
         Session session = null;
         try {
-            session = DatabaseUtil.getNewSession();
+            session = SessionUtil.getNewSession();
             cartoonLocations = session.createCriteria(CartoonLocation.class)
                     .add(Restrictions.eq("cartoon.cartoonId", cartoon.getCartoonId()))
                     .setProjection(Projections.property("locationName"))
@@ -53,7 +53,7 @@ public class SimpleLocationDataAccess implements LocationDataAccess {
             Logger.getLogger(SimpleLocationDataAccess.class.getName()).log(Level.INFO,
                     "Exception occurred during SimpleLocationDataAccess.findCartoonLocationNames.", e);
         } finally {
-            DatabaseUtil.close(session);
+            SessionUtil.close(session);
         }
         return cartoonLocations;
     }
@@ -63,7 +63,7 @@ public class SimpleLocationDataAccess implements LocationDataAccess {
         CartoonLocation cartoonLocation = null;
         Session session = null;
         try {
-            session = DatabaseUtil.getNewSession();
+            session = SessionUtil.getNewSession();
             Criteria criteria = session.createCriteria(CartoonLocation.class);
             criteria.add(Restrictions.ilike("locationName", locationName))
                     .add(Restrictions.eq("cartoon", cartoon));
@@ -75,7 +75,7 @@ public class SimpleLocationDataAccess implements LocationDataAccess {
             Logger.getLogger(SimpleLocationDataAccess.class.getName()).log(Level.INFO,
                     "Exception occurred during SimpleLocationDataAccess.findCartoonLocation.", e);
         } finally {
-            DatabaseUtil.close(session);
+            SessionUtil.close(session);
         }
         return cartoonLocation;
     }
@@ -84,7 +84,7 @@ public class SimpleLocationDataAccess implements LocationDataAccess {
     public boolean addLocation(CartoonLocation cartoonLocation) {
         Session session = null;
         try {
-            session = DatabaseUtil.getNewSession();
+            session = SessionUtil.getNewSession();
             session.getTransaction().begin();
             session.persist(cartoonLocation);
             session.getTransaction().commit();
@@ -97,7 +97,7 @@ public class SimpleLocationDataAccess implements LocationDataAccess {
                     "Exception occurred during SimpleLocationDataAccess.addLocation.", e);
             return false;
         } finally {
-            DatabaseUtil.close(session);
+            SessionUtil.close(session);
         }
         return true;
     }
@@ -106,7 +106,7 @@ public class SimpleLocationDataAccess implements LocationDataAccess {
     public boolean updateLocation(CartoonLocation cartoonLocation) {
         Session session = null;
         try {
-            session = DatabaseUtil.getNewSession();
+            session = SessionUtil.getNewSession();
             session.getTransaction().begin();
             session.merge(cartoonLocation);
             session.getTransaction().commit();
@@ -119,7 +119,7 @@ public class SimpleLocationDataAccess implements LocationDataAccess {
                     "Exception occurred during SimpleLocationDataAccess.updateLocation.", e);
             return false;
         } finally {
-            DatabaseUtil.close(session);
+            SessionUtil.close(session);
         }
         return true;
     }

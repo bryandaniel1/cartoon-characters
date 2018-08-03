@@ -20,7 +20,7 @@ import java.util.List;
 import com.daniel.cartooncharacters.entity.CartoonCharacter;
 import com.daniel.cartooncharacters.entity.CartoonLocation;
 import com.daniel.cartooncharacters.entity.CharacterDemographic;
-import com.daniel.cartooncharacters.util.DatabaseUtil;
+import com.daniel.cartooncharacters.util.SessionUtil;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.hibernate.Criteria;
@@ -56,7 +56,7 @@ public class SimpleCharacterDataAccess implements CharacterDataAccess {
                 queryString.append("AND LOWER(c.title) LIKE :title ");
             }
 
-            session = DatabaseUtil.getNewSession();
+            session = SessionUtil.getNewSession();
             Query query = session.createQuery(queryString.toString());
             if (!characterName.isEmpty()) {
                 query.setString("characterName", "%" + characterName.toLowerCase() + "%");
@@ -77,7 +77,7 @@ public class SimpleCharacterDataAccess implements CharacterDataAccess {
             Logger.getLogger(SimpleCharacterDataAccess.class.getName()).log(Level.INFO,
                     "Exception occurred during SimpleCharacterDataAccess.findCartoonCharacters.", e);
         } finally {
-            DatabaseUtil.close(session);
+            SessionUtil.close(session);
         }
         return matchingCharacters;
     }
@@ -87,7 +87,7 @@ public class SimpleCharacterDataAccess implements CharacterDataAccess {
         CartoonCharacter cartoonCharacter = null;
         Session session = null;
         try {
-            session = DatabaseUtil.getNewSession();
+            session = SessionUtil.getNewSession();
             Criteria criteria = session.createCriteria(CartoonCharacter.class);
             criteria.add(Restrictions.eq("characterName", characterName))
                     .add(Restrictions.eq("characterHome", cartoonLocation));
@@ -99,7 +99,7 @@ public class SimpleCharacterDataAccess implements CharacterDataAccess {
             Logger.getLogger(SimpleCharacterDataAccess.class.getName()).log(Level.INFO,
                     "Exception occurred during SimpleCharacterDataAccess.findCartoonCharacter.", e);
         } finally {
-            DatabaseUtil.close(session);
+            SessionUtil.close(session);
         }
         return cartoonCharacter;
     }
@@ -109,7 +109,7 @@ public class SimpleCharacterDataAccess implements CharacterDataAccess {
         List<String> cartoonCharacterNames = null;
         Session session = null;
         try {
-            session = DatabaseUtil.getNewSession();
+            session = SessionUtil.getNewSession();
             cartoonCharacterNames = session.createCriteria(CartoonCharacter.class)
                     .add(Restrictions.eq("characterHome", cartoonLocation))
                     .setProjection(Projections.property("characterName"))
@@ -121,7 +121,7 @@ public class SimpleCharacterDataAccess implements CharacterDataAccess {
             Logger.getLogger(SimpleCharacterDataAccess.class.getName()).log(Level.INFO,
                     "Exception occurred during SimpleCharacterDataAccess.findCartoonCharacterNames.", e);
         } finally {
-            DatabaseUtil.close(session);
+            SessionUtil.close(session);
         }
         return cartoonCharacterNames;
     }
@@ -130,7 +130,7 @@ public class SimpleCharacterDataAccess implements CharacterDataAccess {
     public boolean addCharacter(CartoonCharacter cartoonCharacter, CharacterDemographic characterDemographic) {
         Session session = null;
         try {
-            session = DatabaseUtil.getNewSession();
+            session = SessionUtil.getNewSession();
             session.getTransaction().begin();
             session.persist(cartoonCharacter);
             session.persist(characterDemographic);
@@ -144,7 +144,7 @@ public class SimpleCharacterDataAccess implements CharacterDataAccess {
                     "Exception occurred during SimpleCharacterDataAccess.addCharacter.", e);
             return false;
         } finally {
-            DatabaseUtil.close(session);
+            SessionUtil.close(session);
         }
         return true;
     }
@@ -153,7 +153,7 @@ public class SimpleCharacterDataAccess implements CharacterDataAccess {
     public boolean updateCharacter(CartoonCharacter cartoonCharacter, CharacterDemographic characterDemographic) {
         Session session = null;
         try {
-            session = DatabaseUtil.getNewSession();
+            session = SessionUtil.getNewSession();
             session.getTransaction().begin();
             session.merge(cartoonCharacter);
             session.merge(characterDemographic);
@@ -167,7 +167,7 @@ public class SimpleCharacterDataAccess implements CharacterDataAccess {
                     "Exception occurred during SimpleCharacterDataAccess.updateCharacter.", e);
             return false;
         } finally {
-            DatabaseUtil.close(session);
+            SessionUtil.close(session);
         }
         return true;
     }

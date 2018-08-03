@@ -15,6 +15,7 @@
  */
 package com.daniel.cartooncharacters.util;
 
+import com.daniel.cartooncharacters.data.CharacterListener;
 import com.daniel.cartooncharacters.entity.Cartoon;
 import com.daniel.cartooncharacters.entity.CartoonCharacter;
 import com.daniel.cartooncharacters.entity.CartoonLocation;
@@ -31,13 +32,17 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistry;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.event.service.spi.EventListenerRegistry;
+import org.hibernate.event.spi.EventType;
+import org.hibernate.internal.SessionFactoryImpl;
 
 /**
- * This class provides utility methods for database access functions.
+ * This class establishes the configuration of the Hibernate session factory and
+ * provides utility methods for accessing and closing sessions.
  *
  * @author Bryan Daniel
  */
-public class DatabaseUtil {
+public class SessionUtil {
 
     /**
      * The Hibernate session factory
@@ -84,12 +89,17 @@ public class DatabaseUtil {
         StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                 .applySettings(config.getProperties()).build();
         SESSION_FACTORY = config.buildSessionFactory(serviceRegistry);
+
+        EventListenerRegistry registry = ((SessionFactoryImpl) SESSION_FACTORY).getServiceRegistry().getService(
+                EventListenerRegistry.class);
+        registry.getEventListenerGroup(EventType.PRE_UPDATE).appendListener(new CharacterListener());
+        registry.getEventListenerGroup(EventType.PRE_INSERT).appendListener(new CharacterListener());
     }
 
     /**
      * Private constructor - not called
      */
-    public DatabaseUtil() {
+    public SessionUtil() {
     }
 
     /**
@@ -111,7 +121,7 @@ public class DatabaseUtil {
             try {
                 session.close();
             } catch (HibernateException he) {
-                Logger.getLogger(DatabaseUtil.class.getName()).log(Level.SEVERE,
+                Logger.getLogger(SessionUtil.class.getName()).log(Level.SEVERE,
                         "An exception occurred while closing the session.", he);
             }
         }

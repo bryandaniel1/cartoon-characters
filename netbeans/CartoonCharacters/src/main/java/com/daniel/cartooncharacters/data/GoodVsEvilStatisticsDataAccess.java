@@ -16,7 +16,7 @@
 package com.daniel.cartooncharacters.data;
 
 import com.daniel.cartooncharacters.entity.Cartoon;
-import com.daniel.cartooncharacters.util.DatabaseUtil;
+import com.daniel.cartooncharacters.util.SessionUtil;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
@@ -50,7 +50,7 @@ public class GoodVsEvilStatisticsDataAccess implements StatisticsDataAccess {
         ObservableList<PieChart.Data> statistics = FXCollections.observableArrayList();
         Session session = null;
         try {
-            session = DatabaseUtil.getNewSession();
+            session = SessionUtil.getNewSession();
 
             StringBuilder queryString = new StringBuilder();
             queryString.append("SELECT COUNT(*) FROM CharacterDemographic");
@@ -88,7 +88,7 @@ public class GoodVsEvilStatisticsDataAccess implements StatisticsDataAccess {
             Logger.getLogger(GenderStatisticsDataAccess.class.getName()).log(Level.INFO,
                     "Exception occurred during GenderStatisticsDataAccess.findStatistics.", e);
         } finally {
-            DatabaseUtil.close(session);
+            SessionUtil.close(session);
         }
         return statistics;
     }
