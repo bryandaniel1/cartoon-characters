@@ -21,8 +21,8 @@ import com.daniel.cartooncharacters.entity.CartoonCharacter;
 import com.daniel.cartooncharacters.entity.CartoonLocation;
 import com.daniel.cartooncharacters.entity.CharacterDemographic;
 import com.daniel.cartooncharacters.util.SessionUtil;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
@@ -37,6 +37,18 @@ import org.hibernate.criterion.Restrictions;
  * @author Bryan Daniel
  */
 public class SimpleCharacterDataAccess implements CharacterDataAccess {
+
+    /**
+     * The logger for this class
+     */
+    private Logger logger;
+
+    /**
+     * Sets the value for the logger.
+     */
+    public SimpleCharacterDataAccess() {
+        logger = LogManager.getLogger(SimpleCharacterDataAccess.class);
+    }
 
     @Override
     public List<CartoonCharacter> findCartoonCharacters(String characterName, String cartoonTitle) {
@@ -71,11 +83,9 @@ public class SimpleCharacterDataAccess implements CharacterDataAccess {
             });
 
         } catch (HibernateException he) {
-            Logger.getLogger(SimpleCharacterDataAccess.class.getName()).log(Level.INFO,
-                    "HibernateException exception occurred during SimpleCharacterDataAccess.findCartoonCharacters.", he);
+            logger.error("HibernateException exception occurred during SimpleCharacterDataAccess.findCartoonCharacters.", he);
         } catch (Exception e) {
-            Logger.getLogger(SimpleCharacterDataAccess.class.getName()).log(Level.INFO,
-                    "Exception occurred during SimpleCharacterDataAccess.findCartoonCharacters.", e);
+            logger.error("Exception occurred during SimpleCharacterDataAccess.findCartoonCharacters.", e);
         } finally {
             SessionUtil.close(session);
         }
@@ -93,11 +103,9 @@ public class SimpleCharacterDataAccess implements CharacterDataAccess {
                     .add(Restrictions.eq("characterHome", cartoonLocation));
             cartoonCharacter = (CartoonCharacter) criteria.uniqueResult();
         } catch (HibernateException he) {
-            Logger.getLogger(SimpleCharacterDataAccess.class.getName()).log(Level.INFO,
-                    "HibernateException exception occurred during SimpleCharacterDataAccess.findCartoonCharacter.", he);
+            logger.error("HibernateException exception occurred during SimpleCharacterDataAccess.findCartoonCharacter.", he);
         } catch (Exception e) {
-            Logger.getLogger(SimpleCharacterDataAccess.class.getName()).log(Level.INFO,
-                    "Exception occurred during SimpleCharacterDataAccess.findCartoonCharacter.", e);
+            logger.error("Exception occurred during SimpleCharacterDataAccess.findCartoonCharacter.", e);
         } finally {
             SessionUtil.close(session);
         }
@@ -115,11 +123,9 @@ public class SimpleCharacterDataAccess implements CharacterDataAccess {
                     .setProjection(Projections.property("characterName"))
                     .list();
         } catch (HibernateException he) {
-            Logger.getLogger(SimpleCharacterDataAccess.class.getName()).log(Level.INFO,
-                    "HibernateException exception occurred during SimpleCharacterDataAccess.findCartoonCharacterNames.", he);
+            logger.error("HibernateException exception occurred during SimpleCharacterDataAccess.findCartoonCharacterNames.", he);
         } catch (Exception e) {
-            Logger.getLogger(SimpleCharacterDataAccess.class.getName()).log(Level.INFO,
-                    "Exception occurred during SimpleCharacterDataAccess.findCartoonCharacterNames.", e);
+            logger.error("Exception occurred during SimpleCharacterDataAccess.findCartoonCharacterNames.", e);
         } finally {
             SessionUtil.close(session);
         }
@@ -136,12 +142,10 @@ public class SimpleCharacterDataAccess implements CharacterDataAccess {
             session.persist(characterDemographic);
             session.getTransaction().commit();
         } catch (HibernateException he) {
-            Logger.getLogger(SimpleCharacterDataAccess.class.getName()).log(Level.INFO,
-                    "HibernateException exception occurred during SimpleCharacterDataAccess.addCharacter.", he);
+            logger.error("HibernateException exception occurred during SimpleCharacterDataAccess.addCharacter.", he);
             return false;
         } catch (Exception e) {
-            Logger.getLogger(SimpleCharacterDataAccess.class.getName()).log(Level.INFO,
-                    "Exception occurred during SimpleCharacterDataAccess.addCharacter.", e);
+            logger.error("Exception occurred during SimpleCharacterDataAccess.addCharacter.", e);
             return false;
         } finally {
             SessionUtil.close(session);
@@ -159,12 +163,10 @@ public class SimpleCharacterDataAccess implements CharacterDataAccess {
             session.merge(characterDemographic);
             session.getTransaction().commit();
         } catch (HibernateException he) {
-            Logger.getLogger(SimpleCharacterDataAccess.class.getName()).log(Level.INFO,
-                    "HibernateException exception occurred during SimpleCharacterDataAccess.updateCharacter.", he);
+            logger.error("HibernateException exception occurred during SimpleCharacterDataAccess.updateCharacter.", he);
             return false;
         } catch (Exception e) {
-            Logger.getLogger(SimpleCharacterDataAccess.class.getName()).log(Level.INFO,
-                    "Exception occurred during SimpleCharacterDataAccess.updateCharacter.", e);
+            logger.error("Exception occurred during SimpleCharacterDataAccess.updateCharacter.", e);
             return false;
         } finally {
             SessionUtil.close(session);

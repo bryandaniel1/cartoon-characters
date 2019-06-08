@@ -15,16 +15,18 @@
  */
 package com.daniel.cartooncharacters.util;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Base64;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -50,14 +52,24 @@ public class ConfigurationManager {
     private static final String ENCRYPTION_KEY = "16-character key";
 
     /**
+     * The name of the configuration directory
+     */
+    public static final String CONFIGURATION_DIRECTORY = "config";
+
+    /**
+     * The name of the configuration file
+     */
+    public static final String CONFIGURATION_FILE = "configuration.xml";
+
+    /**
      * The database connection properties
      */
     private static ConnectionProperties connectionProperties;
-    
+
     /**
      * Private constructor - not called
      */
-    public ConfigurationManager(){        
+    public ConfigurationManager() {
     }
 
     /**
@@ -66,6 +78,7 @@ public class ConfigurationManager {
      */
     public static void findConnectionProperties() {
 
+        Logger logger = LogManager.getLogger(ConfigurationManager.class);
         InputStream input = null;
         try {
             String driverStringValue = null;
@@ -75,7 +88,9 @@ public class ConfigurationManager {
             String usernameValue = null;
             String passwordValue = null;
 
-            input = ConfigurationManager.class.getResourceAsStream("/config/configuration.xml");
+            //input = ConfigurationManager.class.getResourceAsStream("/config/configuration.xml");
+            input = new FileInputStream(new File(new File(System.getProperty("user.dir")),
+                    CONFIGURATION_DIRECTORY + File.separator + CONFIGURATION_FILE));
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
             Document doc = dBuilder.parse(input);
@@ -146,16 +161,16 @@ public class ConfigurationManager {
             connectionProperties = new ConnectionProperties(driverStringValue,
                     hostValue, databaseNameValue, portValue, usernameValue, decrypt(passwordValue));
         } catch (ParserConfigurationException | SAXException | IOException ex) {
-            Logger.getLogger(ConfigurationManager.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error(
+                    "ParserConfigurationException or SAXException or IOException in findConnectionProperties method.", ex);
         } catch (Exception ex) {
-            Logger.getLogger(ConfigurationManager.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error("Exception occurred in findConnectionProperties method.", ex);
         } finally {
             if (input != null) {
                 try {
                     input.close();
                 } catch (IOException ex) {
-                    Logger.getLogger(ConfigurationManager.class.getName()).log(Level.SEVERE,
-                            "An exception occurred in findConnectionProperties method.", ex);
+                    logger.error("An exception occurred in findConnectionProperties method.", ex);
                 }
             }
         }

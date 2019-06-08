@@ -19,8 +19,8 @@ import com.daniel.cartooncharacters.entity.Cartoon;
 import com.daniel.cartooncharacters.entity.CartoonLocation;
 import com.daniel.cartooncharacters.util.SessionUtil;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -36,6 +36,18 @@ import org.hibernate.criterion.Restrictions;
  */
 public class SimpleLocationDataAccess implements LocationDataAccess {
 
+    /**
+     * The logger for this class
+     */
+    private Logger logger;
+
+    /**
+     * Sets the value for the logger.
+     */
+    public SimpleLocationDataAccess() {
+        logger = LogManager.getLogger(SimpleLocationDataAccess.class);
+    }
+
     @Override
     public List<String> findCartoonLocationNames(Cartoon cartoon) {
         List<String> cartoonLocations = null;
@@ -47,11 +59,9 @@ public class SimpleLocationDataAccess implements LocationDataAccess {
                     .setProjection(Projections.property("locationName"))
                     .list();
         } catch (HibernateException he) {
-            Logger.getLogger(SimpleLocationDataAccess.class.getName()).log(Level.INFO,
-                    "HibernateException exception occurred during SimpleLocationDataAccess.findCartoonLocationNames.", he);
+            logger.error("HibernateException exception occurred during SimpleLocationDataAccess.findCartoonLocationNames.", he);
         } catch (Exception e) {
-            Logger.getLogger(SimpleLocationDataAccess.class.getName()).log(Level.INFO,
-                    "Exception occurred during SimpleLocationDataAccess.findCartoonLocationNames.", e);
+            logger.error("Exception occurred during SimpleLocationDataAccess.findCartoonLocationNames.", e);
         } finally {
             SessionUtil.close(session);
         }
@@ -69,11 +79,9 @@ public class SimpleLocationDataAccess implements LocationDataAccess {
                     .add(Restrictions.eq("cartoon", cartoon));
             cartoonLocation = (CartoonLocation) criteria.uniqueResult();
         } catch (HibernateException he) {
-            Logger.getLogger(SimpleLocationDataAccess.class.getName()).log(Level.INFO,
-                    "HibernateException exception occurred during SimpleLocationDataAccess.findCartoonLocation.", he);
+            logger.error("HibernateException exception occurred during SimpleLocationDataAccess.findCartoonLocation.", he);
         } catch (Exception e) {
-            Logger.getLogger(SimpleLocationDataAccess.class.getName()).log(Level.INFO,
-                    "Exception occurred during SimpleLocationDataAccess.findCartoonLocation.", e);
+            logger.error("Exception occurred during SimpleLocationDataAccess.findCartoonLocation.", e);
         } finally {
             SessionUtil.close(session);
         }
@@ -89,12 +97,10 @@ public class SimpleLocationDataAccess implements LocationDataAccess {
             session.persist(cartoonLocation);
             session.getTransaction().commit();
         } catch (HibernateException he) {
-            Logger.getLogger(SimpleLocationDataAccess.class.getName()).log(Level.INFO,
-                    "HibernateException exception occurred during SimpleLocationDataAccess.addLocation.", he);
+            logger.error("HibernateException exception occurred during SimpleLocationDataAccess.addLocation.", he);
             return false;
         } catch (Exception e) {
-            Logger.getLogger(SimpleLocationDataAccess.class.getName()).log(Level.INFO,
-                    "Exception occurred during SimpleLocationDataAccess.addLocation.", e);
+            logger.error("Exception occurred during SimpleLocationDataAccess.addLocation.", e);
             return false;
         } finally {
             SessionUtil.close(session);
@@ -111,12 +117,10 @@ public class SimpleLocationDataAccess implements LocationDataAccess {
             session.merge(cartoonLocation);
             session.getTransaction().commit();
         } catch (HibernateException he) {
-            Logger.getLogger(SimpleLocationDataAccess.class.getName()).log(Level.INFO,
-                    "HibernateException exception occurred during SimpleLocationDataAccess.updateLocation.", he);
+            logger.error("HibernateException exception occurred during SimpleLocationDataAccess.updateLocation.", he);
             return false;
         } catch (Exception e) {
-            Logger.getLogger(SimpleLocationDataAccess.class.getName()).log(Level.INFO,
-                    "Exception occurred during SimpleLocationDataAccess.updateLocation.", e);
+            logger.error("Exception occurred during SimpleLocationDataAccess.updateLocation.", e);
             return false;
         } finally {
             SessionUtil.close(session);

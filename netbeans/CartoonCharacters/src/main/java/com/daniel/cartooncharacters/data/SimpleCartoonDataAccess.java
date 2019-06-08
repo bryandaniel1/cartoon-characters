@@ -18,8 +18,8 @@ package com.daniel.cartooncharacters.data;
 import com.daniel.cartooncharacters.entity.Cartoon;
 import com.daniel.cartooncharacters.util.SessionUtil;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -35,6 +35,18 @@ import org.hibernate.criterion.Restrictions;
  */
 public class SimpleCartoonDataAccess implements CartoonDataAccess {
 
+    /**
+     * The logger for this class
+     */
+    private Logger logger;
+
+    /**
+     * Sets the value for the logger.
+     */
+    public SimpleCartoonDataAccess() {
+        logger = LogManager.getLogger(SimpleCartoonDataAccess.class);
+    }
+
     @Override
     public List<String> findAllCartoonNames() {
 
@@ -45,11 +57,9 @@ public class SimpleCartoonDataAccess implements CartoonDataAccess {
             cartoons = session.createCriteria(Cartoon.class)
                     .setProjection(Projections.property("title")).list();
         } catch (HibernateException he) {
-            Logger.getLogger(SimpleCartoonDataAccess.class.getName()).log(Level.INFO,
-                    "HibernateException exception occurred during SimpleCartoonDataAccess.findAllCartoons.", he);
+            logger.error("HibernateException exception occurred during SimpleCartoonDataAccess.findAllCartoons.", he);
         } catch (Exception e) {
-            Logger.getLogger(SimpleCartoonDataAccess.class.getName()).log(Level.INFO,
-                    "Exception occurred during SimpleCartoonDataAccess.findAllCartoons.", e);
+            logger.error("Exception occurred during SimpleCartoonDataAccess.findAllCartoons.", e);
         } finally {
             SessionUtil.close(session);
         }
@@ -67,11 +77,9 @@ public class SimpleCartoonDataAccess implements CartoonDataAccess {
             criteria.add(Restrictions.eq("title", cartoonName));
             cartoon = (Cartoon) criteria.uniqueResult();
         } catch (HibernateException he) {
-            Logger.getLogger(SimpleCartoonDataAccess.class.getName()).log(Level.INFO,
-                    "HibernateException exception occurred during SimpleCartoonDataAccess.findCartoon.", he);
+            logger.error("HibernateException exception occurred during SimpleCartoonDataAccess.findCartoon.", he);
         } catch (Exception e) {
-            Logger.getLogger(SimpleCartoonDataAccess.class.getName()).log(Level.INFO,
-                    "Exception occurred during SimpleCartoonDataAccess.findCartoon.", e);
+            logger.error("Exception occurred during SimpleCartoonDataAccess.findCartoon.", e);
         } finally {
             SessionUtil.close(session);
         }
@@ -87,12 +95,10 @@ public class SimpleCartoonDataAccess implements CartoonDataAccess {
             session.persist(cartoon);
             session.getTransaction().commit();
         } catch (HibernateException he) {
-            Logger.getLogger(SimpleCartoonDataAccess.class.getName()).log(Level.INFO,
-                    "HibernateException exception occurred during SimpleCartoonDataAccess.addCartoon.", he);
+            logger.error("HibernateException exception occurred during SimpleCartoonDataAccess.addCartoon.", he);
             return false;
         } catch (Exception e) {
-            Logger.getLogger(SimpleCartoonDataAccess.class.getName()).log(Level.INFO,
-                    "Exception occurred during SimpleCartoonDataAccess.addCartoon.", e);
+            logger.error("Exception occurred during SimpleCartoonDataAccess.addCartoon.", e);
             return false;
         } finally {
             SessionUtil.close(session);
@@ -109,12 +115,10 @@ public class SimpleCartoonDataAccess implements CartoonDataAccess {
             session.merge(cartoon);
             session.getTransaction().commit();
         } catch (HibernateException he) {
-            Logger.getLogger(SimpleCartoonDataAccess.class.getName()).log(Level.INFO,
-                    "HibernateException exception occurred during SimpleCartoonDataAccess.updateCartoon.", he);
+            logger.error("HibernateException exception occurred during SimpleCartoonDataAccess.updateCartoon.", he);
             return false;
         } catch (Exception e) {
-            Logger.getLogger(SimpleCartoonDataAccess.class.getName()).log(Level.INFO,
-                    "Exception occurred during SimpleCartoonDataAccess.updateCartoon.", e);
+            logger.error("Exception occurred during SimpleCartoonDataAccess.updateCartoon.", e);
             return false;
         } finally {
             SessionUtil.close(session);

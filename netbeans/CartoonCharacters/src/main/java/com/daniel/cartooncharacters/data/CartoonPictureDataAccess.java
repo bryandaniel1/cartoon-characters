@@ -20,8 +20,8 @@ import com.daniel.cartooncharacters.entity.CartoonPicture;
 import com.daniel.cartooncharacters.util.SessionUtil;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -34,6 +34,18 @@ import org.hibernate.criterion.Restrictions;
  * @author Bryan Daniel
  */
 public class CartoonPictureDataAccess {
+
+    /**
+     * The logger for this class
+     */
+    private Logger logger;
+    
+    /**
+     * Sets the value for the logger.
+     */
+    public CartoonPictureDataAccess(){
+        logger = LogManager.getLogger(CartoonPictureDataAccess.class);
+    }
 
     /**
      * This method searches for pictures associated with a cartoon.
@@ -56,11 +68,9 @@ public class CartoonPictureDataAccess {
             });
 
         } catch (HibernateException he) {
-            Logger.getLogger(CartoonPictureDataAccess.class.getName()).log(Level.INFO,
-                    "HibernateException exception occurred during CartoonPictureDataAccess.findPictures.", he);
+            logger.error("HibernateException exception occurred during CartoonPictureDataAccess.findPictures.", he);
         } catch (Exception e) {
-            Logger.getLogger(CartoonPictureDataAccess.class.getName()).log(Level.INFO,
-                    "Exception occurred during CartoonPictureDataAccess.findPictures.", e);
+            logger.error("Exception occurred during CartoonPictureDataAccess.findPictures.", e);
         } finally {
             SessionUtil.close(session);
         }
@@ -85,11 +95,9 @@ public class CartoonPictureDataAccess {
             criteria.add(Restrictions.eq("cartoon", cartoon));
             cartoonPictureFound = (CartoonPicture) criteria.uniqueResult();
         } catch (HibernateException he) {
-            Logger.getLogger(CartoonPictureDataAccess.class.getName()).log(Level.INFO,
-                    "HibernateException exception occurred during CartoonPictureDataAccess.findCartoonPicture.", he);
+            logger.error("HibernateException exception occurred during CartoonPictureDataAccess.findCartoonPicture.", he);
         } catch (Exception e) {
-            Logger.getLogger(CartoonPictureDataAccess.class.getName()).log(Level.INFO,
-                    "Exception occurred during CartoonPictureDataAccess.findCartoonPicture.", e);
+            logger.error("Exception occurred during CartoonPictureDataAccess.findCartoonPicture.", e);
         } finally {
             SessionUtil.close(session);
         }
@@ -111,11 +119,9 @@ public class CartoonPictureDataAccess {
             session.getTransaction().commit();
             return true;
         } catch (HibernateException he) {
-            Logger.getLogger(CartoonPictureDataAccess.class.getName()).log(Level.INFO,
-                    "HibernateException exception occurred during CartoonPictureDataAccess.savePicture.", he);
+            logger.error("HibernateException exception occurred during CartoonPictureDataAccess.savePicture.", he);
         } catch (Exception e) {
-            Logger.getLogger(CartoonPictureDataAccess.class.getName()).log(Level.INFO,
-                    "Exception occurred during CartoonPictureDataAccess.savePicture.", e);
+            logger.error("Exception occurred during CartoonPictureDataAccess.savePicture.", e);
         } finally {
             SessionUtil.close(session);
         }
@@ -143,11 +149,9 @@ public class CartoonPictureDataAccess {
             session.getTransaction().commit();
             return true;
         } catch (HibernateException he) {
-            Logger.getLogger(CartoonPictureDataAccess.class.getName()).log(Level.INFO,
-                    "HibernateException exception occurred during CartoonPictureDataAccess.deletePicture.", he);
+            logger.error("HibernateException exception occurred during CartoonPictureDataAccess.deletePicture.", he);
         } catch (Exception e) {
-            Logger.getLogger(CartoonPictureDataAccess.class.getName()).log(Level.INFO,
-                    "Exception occurred during CartoonPictureDataAccess.deletePicture.", e);
+            logger.error("Exception occurred during CartoonPictureDataAccess.deletePicture.", e);
         } finally {
             SessionUtil.close(session);
         }

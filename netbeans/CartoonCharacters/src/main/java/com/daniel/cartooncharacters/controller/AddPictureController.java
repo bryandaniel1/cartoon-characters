@@ -31,8 +31,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.ActionEvent;
@@ -48,6 +46,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * This controller supports the view for adding a new picture to the cartoon
@@ -153,11 +153,17 @@ public class AddPictureController {
     private InputValidator validator;
 
     /**
+     * The logger for this class
+     */
+    private Logger logger;
+
+    /**
      * Called after construction to instantiate the input validation object and
      * populate the cartoon selections of the combo box.
      */
     @FXML
     public void initialize() {
+        logger = LogManager.getLogger(AddPictureController.class);
         validator = new InputValidator();
         cartoonCharacter = new SimpleObjectProperty();
         cartoon = new SimpleObjectProperty();
@@ -192,7 +198,7 @@ public class AddPictureController {
      */
     @FXML
     void handleSaveAction(ActionEvent event) {
-        SavePictureTask task = new SavePictureTask(imageFile, pictureTypeChoiceBox.getSelectionModel().selectedItemProperty().get(), 
+        SavePictureTask task = new SavePictureTask(imageFile, pictureTypeChoiceBox.getSelectionModel().selectedItemProperty().get(),
                 cartoon.get(), cartoonLocation.get(), cartoonCharacter.get());
         Thread thread = new Thread(task);
         thread.start();
@@ -329,7 +335,7 @@ public class AddPictureController {
                 imagePreview.setImage(new Image(inputStream));
                 return true;
             } catch (IOException ex) {
-                Logger.getLogger(AddPictureController.class.getName()).log(Level.SEVERE, null, ex);
+                logger.error("IOException occurred in openImageFile method.", ex);
             }
         }
         return false;

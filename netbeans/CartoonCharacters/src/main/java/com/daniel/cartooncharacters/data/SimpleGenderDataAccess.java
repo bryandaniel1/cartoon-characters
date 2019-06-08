@@ -18,8 +18,8 @@ package com.daniel.cartooncharacters.data;
 import com.daniel.cartooncharacters.entity.Gender;
 import com.daniel.cartooncharacters.util.SessionUtil;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
@@ -31,6 +31,18 @@ import org.hibernate.Session;
  */
 public class SimpleGenderDataAccess implements GenderDataAccess {
 
+    /**
+     * The logger for this class
+     */
+    private Logger logger;
+
+    /**
+     * Sets the value for the logger.
+     */
+    public SimpleGenderDataAccess() {
+        logger = LogManager.getLogger(SimpleGenderDataAccess.class);
+    }
+
     @Override
     public List<Gender> findAllGenders() {
         List<Gender> cartoons = null;
@@ -39,15 +51,12 @@ public class SimpleGenderDataAccess implements GenderDataAccess {
             session = SessionUtil.getNewSession();
             cartoons = session.createCriteria(Gender.class).list();
         } catch (HibernateException he) {
-            Logger.getLogger(SimpleGenderDataAccess.class.getName()).log(Level.INFO,
-                    "HibernateException exception occurred during SimpleGenderDataAccess.findAllGenders.", he);
+            logger.error("HibernateException exception occurred during SimpleGenderDataAccess.findAllGenders.", he);
         } catch (Exception e) {
-            Logger.getLogger(SimpleGenderDataAccess.class.getName()).log(Level.INFO,
-                    "Exception occurred during SimpleGenderDataAccess.findAllGenders.", e);
+            logger.error("Exception occurred during SimpleGenderDataAccess.findAllGenders.", e);
         } finally {
             SessionUtil.close(session);
         }
         return cartoons;
     }
-
 }

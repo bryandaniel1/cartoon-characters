@@ -24,8 +24,7 @@ import com.daniel.cartooncharacters.entity.CharacterDemographic;
 import com.daniel.cartooncharacters.entity.CharacterPicture;
 import com.daniel.cartooncharacters.entity.Gender;
 import com.daniel.cartooncharacters.entity.LocationPicture;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.logging.log4j.LogManager;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -121,8 +120,7 @@ public class SessionUtil {
             try {
                 session.close();
             } catch (HibernateException he) {
-                Logger.getLogger(SessionUtil.class.getName()).log(Level.SEVERE,
-                        "An exception occurred while closing the session.", he);
+                LogManager.getLogger(SessionUtil.class).error("An exception occurred while closing the session.", he);
             }
         }
     }

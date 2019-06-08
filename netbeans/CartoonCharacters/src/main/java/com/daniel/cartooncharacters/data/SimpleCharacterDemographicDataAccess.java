@@ -18,8 +18,8 @@ package com.daniel.cartooncharacters.data;
 import com.daniel.cartooncharacters.entity.CartoonCharacter;
 import com.daniel.cartooncharacters.entity.CharacterDemographic;
 import com.daniel.cartooncharacters.util.SessionUtil;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -33,6 +33,18 @@ import org.hibernate.criterion.Restrictions;
  */
 public class SimpleCharacterDemographicDataAccess implements CharacterDemographicDataAccess {
 
+    /**
+     * The logger for this class
+     */
+    private Logger logger;
+
+    /**
+     * Sets the value for the logger.
+     */
+    public SimpleCharacterDemographicDataAccess() {
+        logger = LogManager.getLogger(SimpleCharacterDemographicDataAccess.class);
+    }
+
     @Override
     public CharacterDemographic getCharacterDemographic(CartoonCharacter cartoonCharacter) {
         CharacterDemographic characterDemographic = null;
@@ -43,14 +55,12 @@ public class SimpleCharacterDemographicDataAccess implements CharacterDemographi
             criteria.add(Restrictions.eq("character.characterId", cartoonCharacter.getCharacterId()));
             characterDemographic = (CharacterDemographic) criteria.uniqueResult();
         } catch (HibernateException he) {
-            Logger.getLogger(SimpleCharacterDemographicDataAccess.class.getName()).log(Level.INFO,
-                    "HibernateException exception occurred during SimpleCharacterDemographicDataAccess.getCharacterDemographic.", he);
+            logger.error("HibernateException exception occurred during SimpleCharacterDemographicDataAccess.getCharacterDemographic.", he);
         } catch (Exception e) {
-            Logger.getLogger(SimpleCharacterDemographicDataAccess.class.getName()).log(Level.INFO,
-                    "Exception occurred during SimpleCharacterDemographicDataAccess.getCharacterDemographic.", e);
+            logger.error("Exception occurred during SimpleCharacterDemographicDataAccess.getCharacterDemographic.", e);
         } finally {
             SessionUtil.close(session);
         }
         return characterDemographic;
-    }    
+    }
 }

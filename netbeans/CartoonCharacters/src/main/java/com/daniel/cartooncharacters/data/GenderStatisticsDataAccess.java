@@ -20,12 +20,12 @@ import com.daniel.cartooncharacters.util.SessionUtil;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.PieChart.Data;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -38,6 +38,18 @@ import org.hibernate.Session;
  * @author Bryan Daniel
  */
 public class GenderStatisticsDataAccess implements StatisticsDataAccess {
+
+    /**
+     * The logger for this class
+     */
+    private Logger logger;
+    
+    /**
+     * Sets the value for the logger.
+     */
+    public GenderStatisticsDataAccess(){
+        logger = LogManager.getLogger(GenderStatisticsDataAccess.class);
+    }
 
     /**
      * This method collects gender statistics for the given cartoon.
@@ -89,11 +101,9 @@ public class GenderStatisticsDataAccess implements StatisticsDataAccess {
                     new PieChart.Data("not applicable", new BigDecimal(notApplicableCount).divide(totalCount, 2, RoundingMode.HALF_UP).doubleValue()));
 
         } catch (HibernateException he) {
-            Logger.getLogger(GenderStatisticsDataAccess.class.getName()).log(Level.INFO,
-                    "HibernateException exception occurred during GenderStatisticsDataAccess.findStatistics.", he);
+            logger.error("HibernateException exception occurred during GenderStatisticsDataAccess.findStatistics.", he);
         } catch (Exception e) {
-            Logger.getLogger(GenderStatisticsDataAccess.class.getName()).log(Level.INFO,
-                    "Exception occurred during GenderStatisticsDataAccess.findStatistics.", e);
+            logger.error("Exception occurred during GenderStatisticsDataAccess.findStatistics.", e);
         } finally {
             SessionUtil.close(session);
         }

@@ -20,8 +20,8 @@ import com.daniel.cartooncharacters.entity.CharacterPicture;
 import com.daniel.cartooncharacters.util.SessionUtil;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -35,6 +35,18 @@ import org.hibernate.criterion.Restrictions;
  * @author Bryan Daniel
  */
 public class CharacterPictureDataAccess {
+
+    /**
+     * The logger for this class
+     */
+    private Logger logger;
+
+    /**
+     * Sets the value for the logger.
+     */
+    public CharacterPictureDataAccess() {
+        logger = LogManager.getLogger(CharacterPictureDataAccess.class);
+    }
 
     /**
      * This method searches for pictures associated with a cartoon character.
@@ -57,11 +69,9 @@ public class CharacterPictureDataAccess {
             });
 
         } catch (HibernateException he) {
-            Logger.getLogger(CharacterPictureDataAccess.class.getName()).log(Level.INFO,
-                    "HibernateException exception occurred during CharacterPictureDataAccess.findPictures.", he);
+            logger.error("HibernateException exception occurred during CharacterPictureDataAccess.findPictures.", he);
         } catch (Exception e) {
-            Logger.getLogger(CharacterPictureDataAccess.class.getName()).log(Level.INFO,
-                    "Exception occurred during CharacterPictureDataAccess.findPictures.", e);
+            logger.error("Exception occurred during CharacterPictureDataAccess.findPictures.", e);
         } finally {
             SessionUtil.close(session);
         }
@@ -86,11 +96,9 @@ public class CharacterPictureDataAccess {
             criteria.add(Restrictions.eq("cartoonCharacter", cartoonCharacter));
             characterPictureFound = (CharacterPicture) criteria.uniqueResult();
         } catch (HibernateException he) {
-            Logger.getLogger(CharacterPictureDataAccess.class.getName()).log(Level.INFO,
-                    "HibernateException exception occurred during CharacterPictureDataAccess.findCharacterPicture.", he);
+            logger.error("HibernateException exception occurred during CharacterPictureDataAccess.findCharacterPicture.", he);
         } catch (Exception e) {
-            Logger.getLogger(CharacterPictureDataAccess.class.getName()).log(Level.INFO,
-                    "Exception occurred during CharacterPictureDataAccess.findCharacterPicture.", e);
+            logger.error("Exception occurred during CharacterPictureDataAccess.findCharacterPicture.", e);
         } finally {
             SessionUtil.close(session);
         }
@@ -112,11 +120,9 @@ public class CharacterPictureDataAccess {
             session.getTransaction().commit();
             return true;
         } catch (HibernateException he) {
-            Logger.getLogger(CharacterPictureDataAccess.class.getName()).log(Level.INFO,
-                    "HibernateException exception occurred during CharacterPictureDataAccess.savePicture.", he);
+            logger.error("HibernateException exception occurred during CharacterPictureDataAccess.savePicture.", he);
         } catch (Exception e) {
-            Logger.getLogger(CharacterPictureDataAccess.class.getName()).log(Level.INFO,
-                    "Exception occurred during CharacterPictureDataAccess.savePicture.", e);
+            logger.error("Exception occurred during CharacterPictureDataAccess.savePicture.", e);
         } finally {
             SessionUtil.close(session);
         }
@@ -144,11 +150,9 @@ public class CharacterPictureDataAccess {
             session.getTransaction().commit();
             return true;
         } catch (HibernateException he) {
-            Logger.getLogger(CharacterPictureDataAccess.class.getName()).log(Level.INFO,
-                    "HibernateException exception occurred during CharacterPictureDataAccess.deletePicture.", he);
+            logger.error("HibernateException exception occurred during CharacterPictureDataAccess.deletePicture.", he);
         } catch (Exception e) {
-            Logger.getLogger(CharacterPictureDataAccess.class.getName()).log(Level.INFO,
-                    "Exception occurred during CharacterPictureDataAccess.deletePicture.", e);
+            logger.error("Exception occurred during CharacterPictureDataAccess.deletePicture.", e);
         } finally {
             SessionUtil.close(session);
         }

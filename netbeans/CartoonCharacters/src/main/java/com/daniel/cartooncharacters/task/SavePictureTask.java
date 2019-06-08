@@ -29,10 +29,10 @@ import com.daniel.cartooncharacters.util.MessageStage;
 import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.concurrent.Task;
 import javafx.scene.control.Label;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * This class contains the logic for executing calls to the appropriate data
@@ -93,6 +93,11 @@ public class SavePictureTask extends Task<Void> {
     private boolean successful;
 
     /**
+     * The logger for this class
+     */
+    private Logger logger;
+
+    /**
      * Sets values for the instance variables.
      *
      * @param imageFile the image file
@@ -103,6 +108,7 @@ public class SavePictureTask extends Task<Void> {
      */
     public SavePictureTask(File imageFile, PictureType type, Cartoon cartoon,
             CartoonLocation cartoonLocation, CartoonCharacter cartoonCharacter) {
+        logger = LogManager.getLogger(SavePictureTask.class);
         this.imageFile = imageFile;
         this.type = type;
         this.cartoon = cartoon;
@@ -119,9 +125,8 @@ public class SavePictureTask extends Task<Void> {
             try {
                 FileUtil.copyImage(imageFile, newImageFile);
             } catch (IOException ex) {
-                Logger.getLogger(SavePictureTask.class.getName()).log(Level.SEVERE,
-                        MessageFormat.format("An exception occured while saving the image, {0}.",
-                                imageFile.getName()), ex);
+                logger.error(MessageFormat.format("An exception occured while saving the image, {0}.",
+                        imageFile.getName()), ex);
             }
         }
         String newImagePath = FileUtil.getNewImagePath(cartoon.getTitle(), imageFile.getName());

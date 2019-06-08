@@ -20,8 +20,8 @@ import com.daniel.cartooncharacters.entity.LocationPicture;
 import com.daniel.cartooncharacters.util.SessionUtil;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -35,6 +35,18 @@ import org.hibernate.criterion.Restrictions;
  * @author Bryan Daniel
  */
 public class LocationPictureDataAccess {
+
+    /**
+     * The logger for this class
+     */
+    private Logger logger;
+    
+    /**
+     * Sets the value for the logger.
+     */
+    public LocationPictureDataAccess(){
+        logger = LogManager.getLogger(LocationPictureDataAccess.class);
+    }
 
     /**
      * This method searches for pictures associated with a cartoon location.
@@ -56,11 +68,9 @@ public class LocationPictureDataAccess {
                 pictures.add((LocationPicture) o);
             });
         } catch (HibernateException he) {
-            Logger.getLogger(LocationPictureDataAccess.class.getName()).log(Level.INFO,
-                    "HibernateException exception occurred during LocationPictureDataAccess.findPictures.", he);
+            logger.error("HibernateException exception occurred during LocationPictureDataAccess.findPictures.", he);
         } catch (Exception e) {
-            Logger.getLogger(LocationPictureDataAccess.class.getName()).log(Level.INFO,
-                    "Exception occurred during LocationPictureDataAccess.findPictures.", e);
+            logger.error("Exception occurred during LocationPictureDataAccess.findPictures.", e);
         } finally {
             SessionUtil.close(session);
         }
@@ -85,11 +95,9 @@ public class LocationPictureDataAccess {
             criteria.add(Restrictions.eq("cartoonLocation", cartoonLocation));
             locationPictureFound = (LocationPicture) criteria.uniqueResult();
         } catch (HibernateException he) {
-            Logger.getLogger(LocationPictureDataAccess.class.getName()).log(Level.INFO,
-                    "HibernateException exception occurred during LocationPictureDataAccess.findLocationPicture.", he);
+            logger.error("HibernateException exception occurred during LocationPictureDataAccess.findLocationPicture.", he);
         } catch (Exception e) {
-            Logger.getLogger(LocationPictureDataAccess.class.getName()).log(Level.INFO,
-                    "Exception occurred during LocationPictureDataAccess.findLocationPicture.", e);
+            logger.error("Exception occurred during LocationPictureDataAccess.findLocationPicture.", e);
         } finally {
             SessionUtil.close(session);
         }
@@ -111,11 +119,9 @@ public class LocationPictureDataAccess {
             session.getTransaction().commit();
             return true;
         } catch (HibernateException he) {
-            Logger.getLogger(LocationPictureDataAccess.class.getName()).log(Level.INFO,
-                    "HibernateException exception occurred during LocationPictureDataAccess.savePicture.", he);
+            logger.error("HibernateException exception occurred during LocationPictureDataAccess.savePicture.", he);
         } catch (Exception e) {
-            Logger.getLogger(LocationPictureDataAccess.class.getName()).log(Level.INFO,
-                    "Exception occurred during LocationPictureDataAccess.savePicture.", e);
+            logger.error("Exception occurred during LocationPictureDataAccess.savePicture.", e);
         } finally {
             SessionUtil.close(session);
         }
@@ -143,11 +149,9 @@ public class LocationPictureDataAccess {
             session.getTransaction().commit();
             return true;
         } catch (HibernateException he) {
-            Logger.getLogger(LocationPictureDataAccess.class.getName()).log(Level.INFO,
-                    "HibernateException exception occurred during LocationPictureDataAccess.deletePicture.", he);
+            logger.error("HibernateException exception occurred during LocationPictureDataAccess.deletePicture.", he);
         } catch (Exception e) {
-            Logger.getLogger(LocationPictureDataAccess.class.getName()).log(Level.INFO,
-                    "Exception occurred during LocationPictureDataAccess.deletePicture.", e);
+            logger.error("Exception occurred during LocationPictureDataAccess.deletePicture.", e);
         } finally {
             SessionUtil.close(session);
         }

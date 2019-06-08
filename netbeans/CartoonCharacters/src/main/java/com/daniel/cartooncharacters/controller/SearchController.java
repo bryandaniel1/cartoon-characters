@@ -29,8 +29,6 @@ import com.daniel.cartooncharacters.entity.CartoonCharacter;
 import com.daniel.cartooncharacters.task.StatisticsTask;
 import com.daniel.cartooncharacters.validation.InputValidator;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleListProperty;
 import javafx.fxml.FXMLLoader;
@@ -40,6 +38,8 @@ import javafx.scene.control.ProgressIndicator;
 import javafx.scene.control.SelectionMode;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * This controller handles events for character searches, resetting of form
@@ -113,11 +113,17 @@ public class SearchController {
     private ScreenChangeManager screenChangeManager;
 
     /**
+     * The logger for this class
+     */
+    private Logger logger;
+
+    /**
      * This method sets initial values for the search view and objects required
      * by this controller.
      */
     @FXML
     public void initialize() {
+        logger = LogManager.getLogger(SearchController.class);
         characterTable.setItems(characterList);
         characterTable.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         idColumn.setCellValueFactory(new PropertyValueFactory<>("characterId"));
@@ -218,7 +224,7 @@ public class SearchController {
             addCartoonStage.setTitle("Add Cartoon");
             addCartoonStage.show();
         } catch (IOException ex) {
-            Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error("IOException occurred in handleAddCartoon method.", ex);
         }
     }
 
@@ -240,7 +246,7 @@ public class SearchController {
             updateCartoonStage.setTitle("Update Cartoon");
             updateCartoonStage.show();
         } catch (IOException ex) {
-            Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error("IOException occurred in handleUpdateCartoon method.", ex);
         }
     }
 
@@ -262,7 +268,7 @@ public class SearchController {
             addCartoonStage.setTitle("Add Location");
             addCartoonStage.show();
         } catch (IOException ex) {
-            Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error("IOException occurred in handleAddLocation method.", ex);
         }
     }
 
@@ -284,7 +290,7 @@ public class SearchController {
             updateLocationStage.setTitle("Update Location");
             updateLocationStage.show();
         } catch (IOException ex) {
-            Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error("IOException occurred in handleUpdateLocation method.", ex);
         }
     }
 
@@ -306,7 +312,7 @@ public class SearchController {
             addCartoonStage.setTitle("Add Character");
             addCartoonStage.show();
         } catch (IOException ex) {
-            Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error("IOException occurred in handleAddCharacter method.", ex);
         }
     }
 
@@ -328,7 +334,7 @@ public class SearchController {
             updateLocationStage.setTitle("Update Character");
             updateLocationStage.show();
         } catch (IOException ex) {
-            Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error("IOException occurred in handleUpdateCharacter method.", ex);
         }
     }
 
@@ -350,7 +356,7 @@ public class SearchController {
             addPictureStage.setTitle("Add Picture");
             addPictureStage.show();
         } catch (IOException ex) {
-            Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error("IOException occurred in handleAddPicture method.", ex);
         }
     }
 
@@ -372,7 +378,7 @@ public class SearchController {
             deletePictureStage.setTitle("Delete Picture");
             deletePictureStage.show();
         } catch (IOException ex) {
-            Logger.getLogger(SearchController.class.getName()).log(Level.SEVERE, null, ex);
+            logger.error("IOException occurred in handleDeletePicture method.", ex);
         }
     }
 

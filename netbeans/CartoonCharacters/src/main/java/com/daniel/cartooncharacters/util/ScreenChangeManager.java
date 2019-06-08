@@ -21,8 +21,6 @@ import com.daniel.cartooncharacters.controller.HomeController;
 import com.daniel.cartooncharacters.entity.CartoonCharacter;
 import com.daniel.cartooncharacters.entity.CartoonLocation;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
@@ -33,6 +31,7 @@ import javafx.scene.Parent;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
+import org.apache.logging.log4j.LogManager;
 
 /**
  * This class controls the screen-change operations for search details views.
@@ -71,7 +70,8 @@ public class ScreenChangeManager {
                 characterView = loader.load();
                 showRegion(characterView, event);
             } catch (IOException ex) {
-                Logger.getLogger(ScreenChangeManager.class.getName()).log(Level.SEVERE, null, ex);
+                LogManager.getLogger(ScreenChangeManager.class).error(
+                        "IOException occurred in showCharacterDetails method.", ex);
             }
         }
     }
@@ -102,7 +102,8 @@ public class ScreenChangeManager {
                 locationView = loader.load();
                 showRegion(locationView, event);
             } catch (IOException ex) {
-                Logger.getLogger(ScreenChangeManager.class.getName()).log(Level.SEVERE, null, ex);
+                LogManager.getLogger(ScreenChangeManager.class).error(
+                        "IOException occurred in showLocationDetails method.", ex);
             }
         }
     }
@@ -134,7 +135,8 @@ public class ScreenChangeManager {
                 cartoonView = loader.load();
                 showRegion(cartoonView, event);
             } catch (IOException ex) {
-                Logger.getLogger(ScreenChangeManager.class.getName()).log(Level.SEVERE, null, ex);
+                LogManager.getLogger(ScreenChangeManager.class).error(
+                        "IOException occurred in showCartoonDetails method.", ex);
             }
         }
     }
