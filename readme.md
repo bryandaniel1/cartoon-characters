@@ -25,4 +25,4 @@ The purpose of this repository is to provide an example application utilizing th
 **f)** Run the project.
  - Extract the contents of the compressed folder in the desired location.
  - Open a terminal and navigate to the project directory to find the jar file.
- - Run the program with the command, "java -jar <jar-file-name>.jar"
+ - Run the program with the command, "java -jar &lt;name-of-JAR-file&gt;.jar"
