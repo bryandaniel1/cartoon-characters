@@ -40,7 +40,7 @@
                     <source>1.8</source>
                     <target>1.8</target>
                     <compilerArguments>
-                        <bootclasspath>${sun.boot.class.path}${path.separator}${java.home}/lib/jfxrt.jar</bootclasspath>
+                        <bootclasspath>${sun.boot.class.path}${path.separator}${java.home}/lib/ext/jfxrt.jar</bootclasspath>
                     </compilerArguments>
                 </configuration>
             </plugin>
@@ -50,7 +50,7 @@
                 <version>2.16</version>
                 <configuration>
                     <additionalClasspathElements>
-                        <additionalClasspathElement>${java.home}/lib/jfxrt.jar</additionalClasspathElement>
+                        <additionalClasspathElement>${java.home}/lib/ext/jfxrt.jar</additionalClasspathElement>
                     </additionalClasspathElements>
                 </configuration>
             </plugin>
