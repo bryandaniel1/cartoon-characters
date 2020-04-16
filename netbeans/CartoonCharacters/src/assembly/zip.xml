@@ -13,7 +13,6 @@
             <includes>
                 <include>**/*.xml</include>
             </includes>
-            <outputDirectory>/config</outputDirectory>
         </fileSet>
         <fileSet>            
             <directory>${project.basedir}/img</directory>
